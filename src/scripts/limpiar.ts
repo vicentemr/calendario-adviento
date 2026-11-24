@@ -68,7 +68,7 @@ export function prepararLimpieza({ vidrio, escena, alTerminar }: OpcionesLimpiez
   }
 
   function trazo(x: number, y: number) {
-    const grosor = Math.max(18, lienzo.width / dpr / 4.2) * dpr;
+    const grosor = Math.max(18, Math.sqrt(lienzo.width * lienzo.height) / dpr / 4.2) * dpr;
     mctx.lineCap = "round";
     mctx.lineJoin = "round";
     mctx.lineWidth = grosor;
@@ -178,7 +178,8 @@ export function prepararLimpieza({ vidrio, escena, alTerminar }: OpcionesLimpiez
     const inicio = performance.now();
     ultimo = null;
     const paso = (t: number) => {
-      const k = Math.min((t - inicio) / total, 1);
+      // El primer cuadro puede traer una hora anterior a "inicio".
+      const k = Math.min(Math.max((t - inicio) / total, 0), 1);
       const pos = k * (camino.length - 1);
       const i = Math.min(Math.floor(pos), camino.length - 2);
       const f = pos - i;
