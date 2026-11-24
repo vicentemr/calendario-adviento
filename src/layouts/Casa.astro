@@ -1,0 +1,104 @@
+---
+// Lo que comparten los diseños de la casa: la puerta de entrada, la
+// cuadrícula de casillas y la nota con el cupón. Cada diseño pone su fachada
+// (slot "fachada") y sus estilos.
+import "@fontsource-variable/figtree";
+import "@fontsource/caveat-brush/400.css";
+import "../styles/casa.css";
+import Casilla from "../components/Casilla.astro";
+import { config } from "../data/config";
+import { cupones } from "../data/cupones";
+import { cuadricula, type Acomodo } from "../data/cuadricula";
+
+interface Props {
+  diseno: string;
+  acomodo: Acomodo;
+  variantes: number;
+  colorTema: string;
+  colorIcono: string;
+  /** Colores del confeti al abrir los regalos dorados. */
+  confeti: string[];
+  /** Colores de las migas al abrir una casilla común (opcional). */
+  migas?: string[];
+  /** Casillas de vidrio: no se abren con un clic, el diseño avisa cuando se limpian. */
+  vidrio?: boolean;
+}
+const { diseno, acomodo, variantes, colorTema, colorIcono, confeti, migas = [], vidrio = false } = Astro.props;
+const { movil, escritorio, lugares } = cuadricula(acomodo);
+const datos = {
+  diseno,
+  anio: config.anio,
+  abrirTodo: config.abrirTodo,
+  especiales: config.especiales,
+  confeti,
+  migas,
+  manual: vidrio,
+  cupones,
+};
+const favicon =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 8 92 46v46H8V46Z" fill="${colorIcono}"/><path d="M36 92V66a14 14 0 0 1 28 0v26Z" fill="#f2b632"/></svg>`,
+  );
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content={colorTema} />
+    <meta name="description" content={`Un calendario de adviento para ${config.nombreElla}.`} />
+    <link rel="icon" href={favicon} />
+    <title>Adviento para {config.nombreElla}</title>
+  </head>
+  <body data-diseno={diseno}>
+    <slot name="fondo" />
+    <section class="fachada" id="fachada" aria-label="Entrada de la casa">
+      <div class="vista" id="vista">
+        <slot name="fachada" />
+      </div>
+      <div class="letrero">
+        <p class="saludo">Para ti, {config.nombreElla}</p>
+        <p class="toca">Toca la puerta para entrar</p>
+      </div>
+    </section>
+
+    <main id="interior" class="interior" inert>
+      <header class="cabecera">
+        <h1 id="titulo" tabindex="-1">Diciembre, {config.nombreElla}</h1>
+        <p id="subtitulo">Cada día se abre una casilla nueva.</p>
+      </header>
+
+      <section class="marco" aria-label="Calendario de adviento: 31 casillas, una por día">
+        <ol class="casillas" style={`--movil: ${movil}; --escritorio: ${escritorio}`}>
+          {lugares.map((lugar) => <Casilla lugar={lugar} variantes={variantes} vidrio={vidrio} />)}
+        </ol>
+      </section>
+
+      <footer class="pie">
+        <button type="button" class="salir" id="salir">Salir de la casa</button>
+        <p class="firma">Con amor, {config.firma}</p>
+      </footer>
+    </main>
+
+    <p id="aviso" class="aviso" role="status" aria-live="polite"></p>
+
+    <dialog id="nota" class="nota" aria-labelledby="nota-titulo">
+      <p class="nota-dia"></p>
+      <h2 class="nota-titulo" id="nota-titulo"></h2>
+      <p class="nota-texto"></p>
+      <p class="nota-condiciones"></p>
+      <p class="nota-firma">{config.firma}</p>
+      <form method="dialog">
+        <button class="nota-cerrar" type="submit">Cerrar</button>
+      </form>
+    </dialog>
+
+    <script is:inline type="application/json" id="datos-calendario" set:html={JSON.stringify(datos)} />
+    <script>
+      import "../scripts/casa.ts";
+    </script>
+  </body>
+</html>

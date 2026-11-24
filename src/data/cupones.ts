@@ -1,4 +1,5 @@
-// Los 24 cupones del calendario, uno por día de diciembre.
+// Los 31 cupones del calendario, uno por día de diciembre.
+// (La ventana empañada de /ventana solo usa del 1 al 24.)
 //
 // Estos son EJEMPLOS para que veas cómo se ve: reemplázalos por los tuyos.
 // - titulo:      lo que vale el cupón (corto, se ve grande).
@@ -37,4 +38,11 @@ export const cupones: Cupon[] = [
   { dia: 22, titulo: "Vale por una escapada", descripcion: "Un día fuera de la ciudad, solo tú y yo.", condiciones: "Fecha a coordinar en enero." },
   { dia: 23, titulo: "Vale por mi tiempo completo", descripcion: "Celular guardado, todo el día para ti." },
   { dia: 24, titulo: "Vale por una Nochebuena juntos", descripcion: "Y por todas las que vengan.", condiciones: "Válido para siempre." },
+  { dia: 25, titulo: "Vale por un chocolate caliente", descripcion: "Con panetón, en pijama y sin mirar el reloj." },
+  { dia: 26, titulo: "Vale por una siesta larga", descripcion: "Para descansar de tanta cena, bien abrazados." },
+  { dia: 27, titulo: "Vale por un día entero a tu manera", descripcion: "Feliz cumpleaños. Hoy todo se hace como tú quieras.", condiciones: "Incluye torta, velita y deseo." },
+  { dia: 28, titulo: "Vale por una broma perdonada", descripcion: "Me la haces y me río igual.", condiciones: "Válido todo el Día de los Inocentes." },
+  { dia: 29, titulo: "Vale por un recuento del año", descripcion: "Los mejores momentos, contados entre los dos." },
+  { dia: 30, titulo: "Vale por una lista de deseos", descripcion: "Escribimos juntos lo que queremos para el año que viene." },
+  { dia: 31, titulo: "Vale por el primer abrazo del año", descripcion: "A las doce en punto, antes que nadie.", condiciones: "Incluye las doce uvas." },
 ];

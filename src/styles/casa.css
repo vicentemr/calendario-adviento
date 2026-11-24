@@ -1,0 +1,845 @@
+/* Base común de los diseños de la casa. Cada diseño define sus colores y su
+   forma de abrir en pino.css, jengibre.css y envoltura.css. */
+
+:root {
+  --texto: "Figtree Variable", system-ui, sans-serif;
+  --mano: "Caveat Brush", cursive;
+  --salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --rebote: cubic-bezier(0.34, 1.5, 0.5, 1);
+  --oro: linear-gradient(105deg, #b67d1c, #eabf51 26%, #fbe9ad 42%, #e2ae38 60%, #bb841f);
+  --oro-claro: linear-gradient(105deg, #cb932b, #f7d678 26%, #fff3cb 42%, #efc355 60%, #cf972e);
+  --radio: 4px;
+  --espacio: 0.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--fondo);
+  color: var(--tinta);
+  scrollbar-color: var(--acento) var(--fondo);
+}
+
+html:not(.dentro) {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  overflow-x: clip;
+  font-family: var(--texto);
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 3px;
+}
+
+#titulo:focus {
+  outline: none;
+}
+
+::selection {
+  background: var(--acento);
+  color: var(--fondo);
+}
+
+/* ---------- Fachada ---------- */
+
+.fachada {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  background: var(--exterior);
+  /* Unidad de dibujo: la casa siempre cabe, sea cual sea la pantalla. */
+  --u: min(1vw, 0.56vh);
+  --u: min(1vw, 0.56dvh);
+}
+
+.fachada[hidden] {
+  display: none;
+}
+
+.vista {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+}
+
+.vista > * {
+  position: absolute;
+}
+
+.letrero {
+  position: absolute;
+  /* En pantallas muy altas baja un poco, para no quedar lejos de la casa. */
+  inset: max(6vh, env(safe-area-inset-top), (100vh - 175vw) * 0.8) 1.25rem auto;
+  text-align: center;
+  pointer-events: none;
+  transition:
+    opacity 0.45s,
+    translate 0.7s var(--salida);
+}
+
+.fachada[data-paso="abriendo"] .letrero,
+.fachada[data-paso="entrando"] .letrero {
+  opacity: 0;
+  translate: 0 -1.5rem;
+}
+
+.saludo {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2.3rem, min(10vw, 6.5vh), 4rem);
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--letrero);
+}
+
+.toca {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  color: var(--letrero);
+}
+
+/* El vano es el hueco de la puerta: su color es el del interior. */
+.vano {
+  background: var(--fondo);
+  perspective: calc(var(--u) * 190);
+}
+
+.vano::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 80% 60% at 50% 72%, var(--luz), transparent);
+  opacity: 0;
+  transition: opacity 1s 0.15s;
+}
+
+.fachada[data-paso="abriendo"] .vano::before {
+  opacity: 1;
+}
+
+.fachada[data-paso="entrando"] .vano::before {
+  opacity: 0;
+  transition: opacity 1s 0.2s;
+}
+
+.puerta {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.puerta:focus-visible {
+  outline-offset: calc(var(--u) * 2.5);
+}
+
+.hoja-puerta {
+  position: absolute;
+  backface-visibility: visible;
+  transition:
+    transform 1.25s cubic-bezier(0.5, 0, 0.15, 1),
+    filter 1.25s;
+}
+
+.fachada[data-paso="tocando"] .puerta {
+  animation: tocar 0.42s;
+}
+
+/* ---------- Interior ---------- */
+
+.interior {
+  width: min(100% - 2rem, 34rem);
+  margin-inline: auto;
+  padding-block: max(2.5rem, env(safe-area-inset-top)) 3rem;
+}
+
+.cabecera {
+  margin-bottom: 1.75rem;
+}
+
+.cabecera h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 9.5vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.cabecera p {
+  margin: 0.6rem 0 0;
+  font-size: 1.05rem;
+  text-wrap: pretty;
+}
+
+.marco {
+  container-type: inline-size;
+}
+
+.casillas {
+  --columnas: 4;
+  --lado: calc((100cqw - var(--espacio) * (var(--columnas) - 1)) / var(--columnas));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas), 1fr);
+  grid-template-areas: var(--movil);
+  grid-auto-rows: var(--lado);
+  gap: var(--espacio);
+}
+
+.casillas li {
+  position: relative;
+  opacity: 0;
+}
+
+.dentro .casillas li {
+  animation: asomar 0.7s calc(var(--orden) * 42ms) var(--salida) both;
+}
+
+/* La que se está abriendo pasa por encima de sus vecinas. */
+.casillas li:has([data-estado="abriendo"]) {
+  z-index: 4;
+}
+
+.casilla {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radio);
+  background: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  container-type: size;
+  contain: layout style;
+}
+
+.casilla:focus-visible {
+  z-index: 3;
+}
+
+.casilla > span {
+  position: absolute;
+  inset: 0;
+}
+
+.num {
+  font-family: var(--display);
+  line-height: 1;
+  font-size: 44cqmin;
+}
+
+/* Lo que hay dentro de la casilla. */
+.hueco {
+  display: grid;
+  place-items: center;
+  border-radius: var(--radio);
+  background: var(--hueco);
+  color: var(--hueco-tinta);
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.casilla:is([data-estado="abriendo"], [data-estado="abierto"]) .hueco {
+  visibility: inherit;
+}
+
+.casilla[data-estado="abierto"] :is(.tapa, .regalo) {
+  display: none;
+}
+
+.motivo {
+  width: 54cqmin;
+  height: 54cqmin;
+  overflow: visible;
+}
+
+[data-forma="especial"] .motivo {
+  width: 66cqmin;
+  height: 66cqmin;
+}
+
+.motivo .a {
+  fill: var(--ma);
+}
+
+.motivo .b {
+  fill: var(--mb);
+}
+
+.motivo .t {
+  fill: none;
+  stroke: var(--mb);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.motivo .gordo {
+  stroke: var(--ma);
+  stroke-width: 7;
+}
+
+.casilla[data-estado="abriendo"] .motivo {
+  animation: brotar 0.7s var(--demora-motivo, 0.5s) var(--rebote) both;
+}
+
+.chico {
+  position: absolute;
+  top: max(0.3rem, 5cqmin);
+  left: max(0.45rem, 6cqmin);
+  font-size: max(0.8rem, 8cqmin);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+/* Todavía no le toca. */
+.casilla[data-estado="cerrado"] {
+  cursor: default;
+}
+
+.casilla[data-estado="cerrado"] :is(.tapa, .regalo) {
+  filter: brightness(var(--apagado, 0.72));
+}
+
+.casilla[data-estado="cerrado"] .regalo {
+  filter: brightness(0.9);
+}
+
+.casilla.negado {
+  animation: negar 0.4s var(--salida);
+}
+
+@media (hover: hover) {
+  .casilla[data-estado="listo"] .regalo,
+  .casilla[data-estado="listo"] .tapa {
+    transition: translate 0.35s var(--salida);
+  }
+
+  .casilla[data-estado="listo"]:hover :is(.regalo, .tapa) {
+    translate: 0 -3px;
+  }
+}
+
+/* ---------- Regalo dorado (24, 27 y 31) ---------- */
+
+.caja,
+.tapa-regalo,
+.cinta {
+  position: absolute;
+  display: block;
+}
+
+.caja {
+  inset: 33% 4% 0;
+  border-radius: 0 0 var(--radio) var(--radio);
+  background: var(--oro);
+  color: #4a2c05;
+  overflow: hidden;
+}
+
+/* Sombra de la tapa sobre la caja. */
+.caja::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 6cqmin;
+  z-index: 1;
+  background: linear-gradient(rgba(90, 50, 0, 0.4), transparent);
+}
+
+/* Destello que cruza la caja de vez en cuando. */
+.caja::after {
+  content: "";
+  position: absolute;
+  inset: -20% auto -20% -40%;
+  width: 22%;
+  rotate: 14deg;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: destello 6s 1.5s infinite;
+}
+
+li:nth-child(27) .caja::after {
+  animation-delay: 3.2s;
+}
+
+li:nth-child(31) .caja::after {
+  animation-delay: 4.6s;
+}
+
+.tapa-regalo {
+  inset: 20% 0 auto;
+  height: 14%;
+  border-radius: var(--radio);
+  background: var(--oro-claro);
+}
+
+.cinta {
+  top: 0;
+  bottom: 0;
+  left: 60%;
+  width: 12%;
+  background: var(--cinta);
+  transform-origin: 50% 0;
+}
+
+.caja .cinta {
+  left: 60.9%;
+  width: 13%;
+}
+
+.mono {
+  position: absolute;
+  bottom: calc(100% - 3cqmin);
+  left: 66%;
+  width: 46%;
+  translate: -50% 0;
+  overflow: visible;
+  aspect-ratio: 100 / 60;
+}
+
+.mono path,
+.mono circle {
+  fill: var(--cinta);
+  transform-origin: 50px 47px;
+}
+
+.mono .lazo {
+  fill: none;
+  stroke: var(--cinta);
+  stroke-width: 9;
+  stroke-linejoin: round;
+}
+
+.mono .cola {
+  display: none;
+}
+
+.rotulo {
+  position: absolute;
+  left: 8%;
+  bottom: 8%;
+  display: grid;
+  gap: 1.5cqmin;
+  text-align: left;
+}
+
+.rotulo .num {
+  font-size: 34cqmin;
+}
+
+.nombre {
+  font-size: max(0.72rem, 6.2cqmin);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.casilla[data-forma="especial"] .hueco {
+  background: var(--hueco-oro);
+  color: #4a2c05;
+  --ma: var(--oro-a);
+  --mb: var(--oro-b);
+}
+
+.casilla[data-forma="especial"][data-estado="abriendo"] {
+  --demora-motivo: 1.3s;
+}
+
+[data-estado="abriendo"] .hueco {
+  animation: encender 0.45s 1.15s both;
+}
+
+.casilla:not([data-forma="especial"])[data-estado="abriendo"] .hueco {
+  animation: none;
+}
+
+[data-estado="abriendo"] .regalo {
+  animation: menear 0.55s;
+}
+
+[data-estado="abriendo"] .mono .lazo {
+  animation: desatar 0.45s 0.45s cubic-bezier(0.6, -0.3, 0.7, 0.2) both;
+}
+
+[data-estado="abriendo"] .mono .nudo {
+  animation: esfumar 0.2s 0.85s both;
+}
+
+[data-estado="abriendo"] .cinta {
+  animation: recoger 0.35s 0.8s cubic-bezier(0.6, 0, 0.9, 0.4) both;
+}
+
+[data-estado="abriendo"] .tapa-regalo {
+  animation: volar 0.9s 0.95s cubic-bezier(0.25, 0.8, 0.4, 1) both;
+}
+
+[data-estado="abriendo"] .caja {
+  animation: bajar 0.75s 1.25s cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+
+/* El regalo de hoy respira. */
+[data-hoy][data-estado="listo"] .regalo {
+  animation: respirar 2.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+/* ---------- Pie, aviso y papelitos ---------- */
+
+.pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.firma {
+  margin: 0;
+  font-family: var(--mano);
+  font-size: 1.5rem;
+}
+
+.salir {
+  padding: 0.7rem 1.1rem;
+  border: 2px solid currentColor;
+  border-radius: var(--radio);
+  background: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.salir:hover {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--fondo);
+}
+
+.aviso {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 10;
+  width: max-content;
+  max-width: min(100% - 2rem, 26rem);
+  margin: 0;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--radio);
+  background: var(--papel);
+  color: var(--papel-tinta);
+  font-size: 0.95rem;
+  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  translate: -50% 1rem;
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--salida),
+    visibility 0.35s,
+    translate 0.5s var(--salida);
+}
+
+.aviso.visible {
+  opacity: 1;
+  visibility: visible;
+  translate: -50% 0;
+}
+
+.particulas {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particulas i {
+  position: absolute;
+  width: calc(9px * var(--t));
+  height: calc(9px * var(--t));
+}
+
+/* ---------- La nota con el cupón ---------- */
+
+.nota {
+  width: min(100% - 2rem, 25rem);
+  max-height: calc(100dvh - 2rem);
+  padding: 2rem 1.6rem 1.5rem;
+  border: 0;
+  border-radius: var(--radio);
+  background: var(--papel);
+  color: var(--papel-tinta);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.65);
+}
+
+.nota::backdrop {
+  background: var(--velo);
+  animation: encender 0.35s;
+}
+
+/* Los regalos dorados traen su cupón en un sobre de oro. */
+.nota.dorada {
+  box-shadow:
+    inset 0 0 0 0.55rem #e2ae38,
+    0 30px 70px -15px rgba(0, 0, 0, 0.65);
+  padding: 2.5rem 2.1rem 2rem;
+}
+
+.nota-dia {
+  margin: 0;
+  font-weight: 650;
+  color: var(--nota-acento);
+}
+
+.nota-titulo {
+  margin: 0.5rem 0 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 7.5vw, 2.2rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.nota-texto {
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+  text-wrap: pretty;
+}
+
+.nota-condiciones {
+  margin: 1.1rem 0 0;
+  padding-top: 0.8rem;
+  border-top: 2px dotted currentColor;
+  font-size: 0.9rem;
+}
+
+.nota-firma {
+  margin: 1.2rem 0 0;
+  text-align: right;
+  font-family: var(--mano);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--nota-acento);
+}
+
+.nota-cerrar {
+  width: 100%;
+  margin-top: 1.4rem;
+  padding: 0.9rem 1rem;
+  border: 0;
+  border-radius: var(--radio);
+  background: var(--nota-acento);
+  color: var(--papel);
+  font-weight: 650;
+  line-height: 1;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.nota-cerrar:hover {
+  filter: brightness(1.12);
+}
+
+/* ---------- Animaciones ---------- */
+
+@keyframes tocar {
+  0%,
+  50%,
+  100% {
+    transform: none;
+  }
+  20%,
+  70% {
+    transform: scale(0.985) translateX(1px);
+  }
+  35%,
+  85% {
+    transform: scale(1.004) translateX(-1px);
+  }
+}
+
+@keyframes asomar {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes brotar {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-25deg);
+  }
+}
+
+@keyframes negar {
+  20% {
+    translate: -4px 0;
+  }
+  45% {
+    translate: 4px 0;
+  }
+  70% {
+    translate: -2px 0;
+  }
+}
+
+@keyframes destello {
+  0%,
+  75% {
+    left: -40%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+@keyframes encender {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes esfumar {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes menear {
+  20% {
+    transform: rotate(-2.5deg);
+  }
+  45% {
+    transform: rotate(2.5deg);
+  }
+  70% {
+    transform: rotate(-1.5deg);
+  }
+}
+
+@keyframes desatar {
+  to {
+    transform: scale(0);
+  }
+}
+
+@keyframes recoger {
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes volar {
+  55% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(-14%, -190%) rotate(-24deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bajar {
+  to {
+    transform: translateY(16%) scaleY(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes respirar {
+  50% {
+    transform: scale(1.025, 1.04);
+  }
+}
+
+@keyframes latir {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ---------- Pantallas grandes ---------- */
+
+@media (min-width: 62rem) {
+  .interior {
+    width: min(100% - 4rem, 74rem, 148vh);
+    padding-block: 2.25rem;
+  }
+
+  .cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cabecera p {
+    margin: 0;
+  }
+
+  .casillas {
+    --columnas: 12;
+    grid-template-areas: var(--escritorio);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* Celular echado: el letrero va al costado de la casa. */
+@media (orientation: landscape) and (max-height: 30rem) {
+  [data-diseno] .letrero {
+    inset: 42% auto auto 1.5rem;
+    width: 30%;
+    text-align: left;
+  }
+}

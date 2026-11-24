@@ -1,0 +1,72 @@
+---
+import Motivo from "./Motivo.astro";
+import { config } from "../data/config";
+import { gotasPara } from "../data/gotas";
+import type { Lugar } from "../data/cuadricula";
+
+interface Props {
+  lugar: Lugar;
+  /** Cuántos colores o estampados distintos tiene el diseño. */
+  variantes: number;
+  /** Casilla de vidrio empañado: lleva gotas y un corazón adentro. */
+  vidrio?: boolean;
+}
+const { lugar, variantes, vidrio = false } = Astro.props;
+const { dia, forma, orden } = lugar;
+const especial = forma === "especial";
+const gotas = vidrio && !especial ? `; --gotas: ${gotasPara(dia)}` : "";
+const tono = (dia * 5 + Math.floor(dia / 4)) % variantes;
+---
+
+<li style={`grid-area: d${dia}; --orden: ${orden.toFixed(1)}${gotas}`}>
+  <button
+    type="button"
+    class="casilla"
+    data-dia={dia}
+    data-forma={forma}
+    data-tono={tono}
+    data-estado="cerrado"
+    aria-label={`Día ${dia}`}
+  >
+    <span class="hueco" aria-hidden="true">
+      <Motivo dia={dia} corazon={vidrio} />
+      <span class="chico">{especial ? `${dia} ${config.especiales[dia]}` : dia}</span>
+    </span>
+    {
+      especial ? (
+        <span class="regalo" aria-hidden="true">
+          <span class="caja">
+            <span class="cinta" />
+            <span class="rotulo">
+              <span class="num">{dia}</span>
+              <span class="nombre">{config.especiales[dia]}</span>
+            </span>
+          </span>
+          <span class="tapa-regalo">
+            <span class="cinta" />
+            <svg class="mono" viewBox="0 0 100 60">
+              <path class="cola" d="M47 46 28 60M53 46 72 60" />
+              <path class="lazo izq" d="M50 48C40 18 14 4 8 18s14 32 42 30Z" />
+              <path class="lazo der" d="M50 48c10-30 36-44 42-30S78 50 50 48Z" />
+              <circle class="nudo" cx="50" cy="47" r="7" />
+            </svg>
+          </span>
+        </span>
+      ) : (
+        <span class="tapa" aria-hidden="true">
+          <span class="hoja h1">
+            <span class="cara">
+              <span class="num">{dia}</span>
+            </span>
+          </span>
+          <span class="hoja h2">
+            <span class="cara">
+              <span class="num">{dia}</span>
+            </span>
+          </span>
+          <span class="rollo" />
+        </span>
+      )
+    }
+  </button>
+</li>

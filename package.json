@@ -10,9 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource-variable/comfortaa": "^5.3.0",
     "@fontsource-variable/figtree": "^5.3.0",
+    "@fontsource/caprasimo": "^5.3.0",
     "@fontsource/caveat-brush": "^5.3.0",
     "@fontsource/im-fell-english": "^5.3.0",
+    "@fontsource/young-serif": "^5.3.0",
     "astro": "^7.4.13"
   }
 }
