@@ -1,0 +1,138 @@
+---
+// Casa moderna del bosque: tres niveles escalonados. Abajo, cochera y muros
+// grises retirados; al medio, una caja de cedro en voladizo con balcón; arriba,
+// un volumen gris con techo plano. La puerta va aparte, encima (es un botón).
+// Se dibuja en una caja de 80 x 80 unidades.
+
+// Juntas horizontales del cedro y de la cochera.
+const juntas = (desde: number, hasta: number, paso: number) =>
+  Array.from({ length: Math.floor((hasta - desde) / paso) }, (_, i) => +(desde + (i + 1) * paso).toFixed(2));
+const cedro = juntas(23.4, 48.6, 3.6);
+const cochera = juntas(54, 78, 3.4);
+const lamas = [41.2, 43.2, 45.2, 47.2];
+
+// Ventanas con luz: x, y, ancho, alto.
+const ventanas = [
+  // Piso alto
+  [6.5, 4.8, 6.8, 16], [13.9, 4.8, 7, 16], [21.5, 4.8, 6.8, 16],
+  [33.6, 4.8, 3.8, 7.4], [33.6, 13.2, 3.8, 7.6],
+  [43.6, 4.8, 7, 16],
+  // Caja de cedro: ventanal y retícula
+  [5, 27, 6.8, 19], [12.4, 27, 7.2, 19], [20.2, 27, 6.8, 19],
+  [34, 27.4, 3.8, 8.6], [38.6, 27.4, 7, 8.6], [46.4, 27.4, 7, 8.6],
+  [34, 37, 7.2, 8.4], [42, 37, 7.2, 8.4], [50, 37, 3.4, 8.4],
+  [55.4, 27.4, 7, 18],
+  // Planta baja
+  [33, 56, 6, 22], [61.6, 56, 3.4, 22],
+];
+const luces = [66.8, 69.4, 72, 74.6, 77.2, 79.4];
+---
+
+<svg class="casa" viewBox="0 0 80 80" aria-hidden="true">
+  <defs>
+    <linearGradient id="cb-luz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0b160"></stop>
+      <stop offset=".65" stop-color="#ffdca0"></stop>
+      <stop offset="1" stop-color="#d9924a"></stop>
+    </linearGradient>
+    <linearGradient id="cb-cedro" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9592a"></stop>
+      <stop offset="1" stop-color="#8f3d18"></stop>
+    </linearGradient>
+    <linearGradient id="cb-gris" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#56646a"></stop>
+      <stop offset="1" stop-color="#3d494e"></stop>
+    </linearGradient>
+    <linearGradient id="cb-sombra" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#05090b" stop-opacity=".85"></stop>
+      <stop offset="1" stop-color="#05090b" stop-opacity="0"></stop>
+    </linearGradient>
+    <radialGradient id="cb-halo">
+      <stop offset="0" stop-color="#ffbe6e" stop-opacity=".42"></stop>
+      <stop offset="1" stop-color="#ffbe6e" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  <!-- Resplandor de la casa en la niebla -->
+  <ellipse cx="17" cy="36" rx="30" ry="24" fill="url(#cb-halo)"></ellipse>
+  <ellipse cx="52" cy="38" rx="32" ry="24" fill="url(#cb-halo)"></ellipse>
+
+  <!-- Piso alto -->
+  <path fill="url(#cb-gris)" d="M4 2h50v22H4z"></path>
+  <path fill="#2f3a3f" d="M30 2h1.6v22H30zM40 2h2v22h-2zM52.4 2H54v22h-1.6z"></path>
+  <path fill="#14191c" d="M5.7 4h23.4v17.6H5.7zM32.8 4h5.4v17.6h-5.4zM42.8 4h8.6v17.6h-8.6z"></path>
+
+  <!-- Planta baja, retirada -->
+  <path fill="url(#cb-gris)" d="M4 49h66v30H4z"></path>
+  <path fill="#8f9b9e" d="M6 54h25v24.5H6z"></path>
+  <g stroke="#6b777b" stroke-width=".35">{cochera.map((y) => <path d={`M6 ${y}h25`} />)}</g>
+  <path fill="#14191c" d="M32.2 55.2h7.6v23.4h-7.6zM60.8 55.2H66v23.4h-5.2z"></path>
+  <path fill="#14191c" d="M66 55.2h4v23.4h-4z"></path>
+  <path fill="#5f6d72" d="M41 50h3.6v29H41z"></path>
+
+  <!-- Caja de cedro en voladizo -->
+  <path fill="url(#cb-cedro)" d="M0 23h80v27H0z"></path>
+  <g stroke="#7c3313" stroke-width=".3" opacity=".75">
+    {cedro.map((y) => <path d={`M0 ${y}h66`} />)}
+    <path d="M44 23v4M58 46v4M31 23v27M64.4 23v27"></path>
+  </g>
+  <path fill="#14191c" d="M3.6 25.6h24.8v21.8H3.6z"></path>
+  <path fill="#14191c" d="M33.2 26.6h21v19.6h-21zM54.6 26.6h8.6v19.6h-8.6z"></path>
+  <!-- Marco de la caja, más claro donde le da la luna -->
+  <path fill="#cf6a35" d="M0 22.4h80v1.2H0z"></path>
+  <path fill="#6f2c10" d="M0 48.8h80V50H0z"></path>
+  <path fill="none" stroke="#c9622d" stroke-width=".7" d="M3.3 25.3h25.4v22.4H3.3z"></path>
+
+  <!-- Balcón -->
+  <path fill="#1a1210" d="M66 25.6h12.6v23.2H66z"></path>
+  <path fill="#3a1a0c" d="M66 25.6h12.6l-2.4 2.2H66z"></path>
+  <path fill="url(#cb-luz)" d="M67.2 29h4v19.8h-4z" opacity=".9"></path>
+  <path fill="#8a4a22" d="M72.6 29h4v19.8h-4z"></path>
+
+  <!-- Ventanas encendidas -->
+  <g fill="url(#cb-luz)">
+    {ventanas.map(([x, y, w, h]) => <rect x={x} y={y} width={w} height={h} />)}
+  </g>
+  <!-- Siluetas de adentro: repisas, lámpara y arbolito -->
+  <g fill="#7a431c" opacity=".55">
+    <path d="M6.5 9.5h6.8v.6H6.5zM6.5 14.2h6.8v.6H6.5zM21.5 9.5h6.8v.6h-6.8zM21.5 14.2h6.8v.6h-6.8zM7.2 6.8h1v2.7h-1zM8.7 7.4h1v2.1h-1zM10.8 6.6h1v2.9h-1zM22.4 11.6h1v2.6h-1zM24 12.2h1v2h-1zM26 11.4h1v2.8h-1z"></path>
+    <path d="M46.8 4.8h.5v4.5h-.5zM45 11.5l1.2-2.2h1.7l1.2 2.2z"></path>
+    <path d="M34 42.8h19.4v2.6H34zM39.6 27.4h.4v3h-.4zM38.6 32l1-1.6h.4l1 1.6z"></path>
+  </g>
+  <g>
+    <path fill="#1d3f36" d="m16 30.5 2.6 5h-1.4l2.2 4.6h-1.5l2 5.9h-7.8l2-5.9h-1.5l2.2-4.6h-1.4z"></path>
+    <path fill="#e2ae38" d="m16 28.7.6 1.3 1.4.1-1.1 1 .3 1.4-1.2-.8-1.2.8.3-1.4-1.1-1 1.4-.1z"></path>
+    <g fill="#c23a4c"><circle cx="15.2" cy="36.5" r=".5"></circle><circle cx="17.2" cy="39.5" r=".5"></circle><circle cx="14.6" cy="42.5" r=".5"></circle></g>
+  </g>
+
+  <!-- Baranda de lamas con lucecitas -->
+  <path fill="#24130c" d="M65 40h15v1H65zM65 40h.8v10H65zM79.2 40h.8v10h-.8z"></path>
+  <g fill="#4d2614">{lamas.map((y) => <rect x="65" y={y} width="15" height="1.2" />)}</g>
+  <g class="lucecitas">
+    {luces.map((x, i) => <circle cx={x - 0.6} cy={40 + (i % 2 ? 0.9 : 0.2)} r=".55" style={`--i: ${i}`} />)}
+  </g>
+
+  <!-- Techo plano, volado -->
+  <path fill="#15100e" d="M2 2.6h54v1H2z"></path>
+  <path fill="#7b3219" d="M0 .5h58v2.1H0z"></path>
+  <path fill="#a9b9bf" opacity=".55" d="M0 0h58v.5H0z"></path>
+
+  <!-- Sombras bajo cada voladizo -->
+  <path fill="url(#cb-sombra)" d="M4 3.6h50v5H4z"></path>
+  <path fill="url(#cb-sombra)" d="M4 50h66v8H4z"></path>
+
+  <!-- Pilares del voladizo y base -->
+  <path fill="#78868b" d="M71.5 50h2.6v29h-2.6z"></path>
+  <path fill="#4d595e" d="M74.1 50h1.2v29h-1.2z"></path>
+  <path fill="#2b3438" d="M0 78.5h80V80H0z"></path>
+
+  <!-- Arbustos -->
+  <g fill="#16332b">
+    <circle cx="69" cy="77" r="2.6"></circle><circle cx="78" cy="77" r="3"></circle>
+    <circle cx="36" cy="78" r="2.2"></circle><circle cx="1.5" cy="78" r="2.6"></circle>
+  </g>
+  <g fill="#21493d">
+    <circle cx="66" cy="78.4" r="1.9"></circle><circle cx="74" cy="78.2" r="2.5"></circle>
+    <circle cx="39.5" cy="78.6" r="1.7"></circle><circle cx="5" cy="78.6" r="1.8"></circle>
+  </g>
+</svg>

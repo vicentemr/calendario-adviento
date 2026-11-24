@@ -3,7 +3,7 @@
 
 type Luz = { x: number; y: number; r: number; fase: number; vel: number };
 type Gota = { x: number; y: number; largo: number; vel: number };
-type Pino = { x: number; base: number; alto: number };
+type Pino = { x: number; base: number; alto: number; suelo?: () => number; lado?: 1 | -1 };
 
 /** Duración de cada subida y bajada de la pareja, en milisegundos. */
 const CICLO_PAREJA = 20000;
@@ -19,6 +19,36 @@ function aleatorio(semilla: number) {
   };
 }
 
+export interface PinoProtagonista {
+  /** Posición horizontal y altura de la punta, como fracción de la pantalla. */
+  x: number;
+  punta: number;
+  /** Ancho del pino respecto a su alto. */
+  esbeltez: number;
+  /** Altura (en píxeles) desde donde empiezan a trepar. */
+  suelo: () => number;
+  /** De qué lado del tronco van: 1 = derecha, -1 = izquierda. */
+  lado: 1 | -1;
+}
+
+/** Cómo está la pareja en este cuadro. */
+export interface EstadoPareja {
+  /** De -1 a 1: brazos y piernas alternándose. */
+  paso: number;
+  viento: number;
+  /** 0 trepando, 1 descansando en la punta. */
+  descanso: number;
+  /** Segundos dentro de la vuelta. */
+  s: number;
+}
+
+export interface OpcionesEscena {
+  /** Dibuja a la pareja (en unidades, tronco en x = 0). Si falta, va en silueta. */
+  pareja?: (c: CanvasRenderingContext2D, estado: EstadoPareja) => void;
+  /** Pinos destacados, los únicos donde trepa la pareja. Se recalculan al cambiar la pantalla. */
+  protagonistas?: () => PinoProtagonista[];
+}
+
 export class Escena {
   readonly canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -32,8 +62,12 @@ export class Escena {
   private ultimo = 0;
   private oyentes = new Set<() => void>();
   private pinos: Pino[] = [];
+  private lienzoPareja = document.createElement("canvas");
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    private opciones: OpcionesEscena = {},
+  ) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d")!;
     this.redimensionar();
@@ -124,6 +158,23 @@ export class Escena {
         c.fillRect(0, y - h * 0.24, w, h * 0.36);
       }
     }
+
+    const { protagonistas } = this.opciones;
+    if (protagonistas) {
+      this.pinos = [];
+      for (const p of protagonistas()) {
+        const base = h * 1.02;
+        const alto = base - h * p.punta;
+        this.pinoDetallado(c, w * p.x, base, Math.min(alto * p.esbeltez, w * 0.44), alto);
+        this.pinos.push({
+          x: (w * p.x) / this.dpr,
+          base: base / this.dpr,
+          alto: alto / this.dpr,
+          suelo: p.suelo,
+          lado: p.lado,
+        });
+      }
+    }
   }
 
   /** Silueta de pino: tronco central con pisos de ramas en zigzag. */
@@ -156,6 +207,72 @@ export class Escena {
     for (let i = izq.length - 1; i >= 0; i--) c.lineTo(izq[i][0], izq[i][1]);
     c.closePath();
     c.fillStyle = color;
+    c.fill();
+  }
+
+  /** Pino para trepar: tronco a la vista y pisos de ramas que caen. */
+  private pinoDetallado(c: CanvasRenderingContext2D, x: number, base: number, ancho: number, alto: number) {
+    const punta = base - alto;
+    const grosor = alto * 0.013;
+    const tronco = c.createLinearGradient(x - grosor, 0, x + grosor, 0);
+    tronco.addColorStop(0, "#23150f");
+    tronco.addColorStop(0.6, "#4d2f20");
+    tronco.addColorStop(1, "#5d3b29");
+    c.fillStyle = tronco;
+    c.beginPath();
+    c.moveTo(x - grosor * 0.35, punta + alto * 0.03);
+    c.lineTo(x + grosor * 0.35, punta + alto * 0.03);
+    c.lineTo(x + grosor, base);
+    c.lineTo(x - grosor, base);
+    c.fill();
+
+    const pisos = 12;
+    const paso = (alto * 0.8) / pisos;
+    const caida = paso * 1.15;
+    // De abajo hacia arriba, para que cada piso tape el nacimiento del anterior.
+    for (let i = pisos - 1; i >= 0; i--) {
+      const y = punta + alto * 0.045 + i * paso;
+      const radio = (ancho / 2) * (0.22 + 0.78 * (i / (pisos - 1)));
+      for (const lado of [-1, 1]) {
+        // El lado derecho recibe la luz de la luna.
+        c.fillStyle = lado > 0 ? "#225444" : "#173c31";
+        c.beginPath();
+        c.moveTo(x - lado * grosor, y - paso * 0.1);
+        c.quadraticCurveTo(x + lado * radio * 0.45, y + caida * 0.1, x + lado * radio, y + caida);
+        // Borde de abajo aserrado.
+        for (const [kx, ky] of [
+          [0.84, 0.78],
+          [0.74, 0.98],
+          [0.6, 0.68],
+          [0.5, 0.86],
+          [0.36, 0.52],
+          [0.26, 0.68],
+          [0.12, 0.34],
+        ]) {
+          c.lineTo(x + lado * radio * kx, y + caida * ky);
+        }
+        c.closePath();
+        c.fill();
+      }
+      if (i % 2) continue;
+      // Rama de frente, en un piso sí y otro no: deja ver el tronco.
+      c.fillStyle = "#1d493b";
+      c.beginPath();
+      c.moveTo(x - grosor * 1.2, y - paso * 0.1);
+      c.lineTo(x + grosor * 1.2, y - paso * 0.1);
+      c.quadraticCurveTo(x + radio * 0.16, y + caida * 0.5, x + radio * 0.3, y + caida * 0.92);
+      c.lineTo(x + radio * 0.14, y + caida * 0.8);
+      c.lineTo(x, y + caida * 1.02);
+      c.lineTo(x - radio * 0.14, y + caida * 0.8);
+      c.lineTo(x - radio * 0.3, y + caida * 0.92);
+      c.quadraticCurveTo(x - radio * 0.16, y + caida * 0.5, x - grosor * 1.2, y - paso * 0.1);
+      c.fill();
+    }
+    c.fillStyle = "#225444";
+    c.beginPath();
+    c.moveTo(x, punta);
+    c.lineTo(x + grosor * 1.1, punta + alto * 0.06);
+    c.lineTo(x - grosor * 1.1, punta + alto * 0.06);
     c.fill();
   }
 
@@ -269,7 +386,11 @@ export class Escena {
     const opacidad = s < 1 ? s : s > 17 ? 18 - s : 1;
 
     const pino = this.pinos[this.pinoDeVuelta(vuelta)];
-    const abajo = Math.min(pino.base - pino.alto * 0.2, this.alto - 20);
+    const abajo = Math.min(
+      pino.base - pino.alto * 0.2,
+      this.alto - 20,
+      pino.suelo?.() ?? Infinity,
+    );
     const arriba = pino.base - pino.alto * 0.9;
     const y = abajo + (arriba - abajo) * avance;
     const escala = Math.max(pino.alto * 0.038, 11);
@@ -277,6 +398,7 @@ export class Escena {
     const viento = Math.sin(s * 5.1) * 0.5 + Math.sin(s * 8.3) * 0.25; // ondea pelo, abrigo y bufanda
     // Arriba levantan un poco la cabeza hacia la luna (arriba a la derecha).
     const mirar = !moviendo && s > 8.4 && s < 10.6 ? 1 : 0;
+    const descanso = suave(Math.max(0, Math.min(1, (s - 8.1) / 0.6, (10.9 - s) / 0.5)));
 
     c.save();
     c.globalAlpha = opacidad;
@@ -288,6 +410,56 @@ export class Escena {
     c.shadowColor = "rgba(190,206,212,0.5)";
     c.shadowBlur = 6;
 
+    const estado: EstadoPareja = { paso, viento, descanso, s };
+    const lado = pino.lado ?? 1;
+    if (this.opciones.pareja) this.estamparPareja(c, estado, escala, lado);
+    else this.dibujarSilueta(c, estado, mirar);
+
+    // Arriba, mientras descansan, sube un corazoncito.
+    if (s >= 8.2 && s < 11) {
+      const k = (s - 8.2) / 2.8;
+      c.shadowBlur = 0;
+      c.globalAlpha = opacidad * Math.sin(k * Math.PI);
+      if (this.opciones.pareja) c.translate(lado * 0.95, -3.9 - k * 1.2);
+      else c.translate(0.15, -3.3 - k * 1.6);
+      c.scale(0.5, 0.5);
+      c.fillStyle = "#c23a4c";
+      c.beginPath();
+      c.moveTo(0, 0.9);
+      c.bezierCurveTo(-1.4, 0, -1, -1.1, 0, -0.45);
+      c.bezierCurveTo(1, -1.1, 1.4, 0, 0, 0.9);
+      c.fill();
+    }
+    c.restore();
+  }
+
+  /**
+   * Dibuja a la pareja aparte y la estampa de una vez, para que el halo y la
+   * transparencia se apliquen al conjunto y no a cada pieza.
+   */
+  private estamparPareja(c: CanvasRenderingContext2D, estado: EstadoPareja, escala: number, lado: 1 | -1) {
+    const medio = 2.8;
+    const arriba = 4.2;
+    const abajo = 1.6;
+    const k = escala * this.dpr;
+    const l = this.lienzoPareja;
+    const w = Math.ceil(medio * 2 * k);
+    const h = Math.ceil((arriba + abajo) * k);
+    const p = l.getContext("2d")!;
+    if (l.width !== w || l.height !== h) {
+      l.width = w;
+      l.height = h;
+    }
+    p.setTransform(1, 0, 0, 1, 0, 0);
+    p.clearRect(0, 0, w, h);
+    p.setTransform(k * lado, 0, 0, k, medio * k, arriba * k);
+    this.opciones.pareja!(p, estado);
+    c.shadowColor = "rgba(200, 215, 220, 0.32)";
+    c.shadowBlur = 6 * this.dpr;
+    c.drawImage(l, -medio, -arriba, medio * 2, arriba + abajo);
+  }
+
+  private dibujarSilueta(c: CanvasRenderingContext2D, { paso, viento, s }: EstadoPareja, mirar: number) {
     const ABRIGO = "#070d10";
     const PIEL_NOCHE = "#0b1317"; // ropa y piel apagadas por la noche, sin caras
     const CHOMPA = "#1c272c";
@@ -401,22 +573,6 @@ export class Escena {
         c.lineTo(x0 - k * (1.1 + viento * 0.25), y0 + k * 0.35 + ola + 0.07 + k * 0.03);
       }
     });
-
-    // Arriba, mientras descansan, sube un corazoncito.
-    if (s >= 8.2 && s < 11) {
-      const k = (s - 8.2) / 2.8;
-      c.shadowBlur = 0;
-      c.globalAlpha = opacidad * Math.sin(k * Math.PI);
-      c.translate(0.15, -3.3 - k * 1.6);
-      c.scale(0.5, 0.5);
-      c.fillStyle = "#c23a4c";
-      c.beginPath();
-      c.moveTo(0, 0.9);
-      c.bezierCurveTo(-1.4, 0, -1, -1.1, 0, -0.45);
-      c.bezierCurveTo(1, -1.1, 1.4, 0, 0, 0.9);
-      c.fill();
-    }
-    c.restore();
   }
 
   private iniciar() {
@@ -424,7 +580,8 @@ export class Escena {
     this.ultimo = 0;
     if (document.hidden) return;
     if (reducirMovimiento.matches) {
-      this.dibujar(0);
+      // Con pinos destacados, la pareja queda quieta arriba del árbol.
+      this.dibujar(this.opciones.protagonistas ? 9500 : 0);
       // Aún así redibujamos cuando alguien está limpiando un vidrio.
       const bucleQuieto = () => {
         if (this.oyentes.size) for (const fn of this.oyentes) fn();

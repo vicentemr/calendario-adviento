@@ -1,0 +1,436 @@
+[data-diseno="crepusculo"],
+:root:has([data-diseno="crepusculo"]) {
+  --fondo: #0f1a1f;
+  --exterior: transparent;
+  --tinta: #e8eef0;
+  --letrero: #e8eef0;
+  --acento: #ffcd8c;
+  --luz: #ffc27a;
+  --display: "IM Fell English", Georgia, serif;
+  --radio: 2px;
+  --espacio: 0.45rem;
+  --cinta: #8b1a2b;
+  --hueco: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(169, 188, 196, 0.32));
+  --hueco-tinta: #e8eef0;
+  --ma: #17353c;
+  --mb: #8b1a2b;
+  --hueco-oro: radial-gradient(circle at 50% 55%, rgba(255, 240, 205, 0.97), rgba(244, 198, 110, 0.86));
+  --oro-a: #17353c;
+  --oro-b: #8b1a2b;
+  --papel: #e8eef0;
+  --papel-tinta: #0f1a1f;
+  --nota-acento: #8b1a2b;
+  --velo: rgba(8, 14, 17, 0.7);
+  --madera: #2e1d14;
+  --madera-clara: #4a3022;
+  --madera-oscura: #1b100a;
+  color-scheme: dark;
+}
+
+/* El bosque: una sola escena fija detrás de la entrada y del interior. */
+[data-diseno="crepusculo"] #escena {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  transition: transform 1.6s var(--salida);
+}
+
+/* Al cruzar la puerta el bosque también se acerca. */
+[data-diseno="crepusculo"]:has(.fachada[data-paso="entrando"]) #escena {
+  transform: scale(1.35);
+  transform-origin: 50% 85%;
+  transition: transform 1.25s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+/* La fachada es transparente: el interior no debe asomar detrás. */
+html:not(.dentro) [data-diseno="crepusculo"] .interior {
+  visibility: hidden;
+}
+
+/* ---------- Entrada ---------- */
+
+[data-diseno="crepusculo"] .saludo {
+  font-style: italic;
+  font-size: clamp(2.5rem, min(11vw, 7vh), 4.25rem);
+}
+
+[data-diseno="crepusculo"] :is(.letrero, .cabecera) {
+  text-shadow: 0 1px 14px rgba(15, 26, 31, 0.85);
+}
+
+[data-diseno="crepusculo"] .tierra {
+  inset: auto 0 0;
+  height: calc(var(--u) * 24);
+  background: linear-gradient(transparent, #081013 45%);
+}
+
+/* La casa mide 80 x 80 unidades y deja libre, a su izquierda, el pino por
+   donde trepa la pareja. Si cambias estas medidas, ajusta crepusculo.ts. */
+[data-diseno="crepusculo"] .hogar {
+  left: calc(50% - var(--u) * 31);
+  bottom: calc(var(--u) * 12);
+  width: calc(var(--u) * 80);
+  height: calc(var(--u) * 80);
+}
+
+[data-diseno="crepusculo"] .hogar > * {
+  position: absolute;
+}
+
+[data-diseno="crepusculo"] .casa {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+[data-diseno="crepusculo"] .lucecitas circle {
+  fill: #ffe0ae;
+  animation: latir 2.8s calc(var(--i) * 0.45s) ease-in-out infinite;
+}
+
+[data-diseno="crepusculo"] .marco-puerta,
+[data-diseno="crepusculo"] .vano {
+  bottom: calc(var(--u) * 1.5);
+}
+
+[data-diseno="crepusculo"] .marco-puerta {
+  left: calc(var(--u) * 45.6);
+  width: calc(var(--u) * 14.8);
+  height: calc(var(--u) * 24.6);
+  background: #c9622d;
+  box-shadow: 0 0 calc(var(--u) * 8) calc(var(--u) * 1) rgba(255, 190, 110, 0.35);
+}
+
+[data-diseno="crepusculo"] .vano {
+  left: calc(var(--u) * 46.6);
+  width: calc(var(--u) * 12.8);
+  height: calc(var(--u) * 23.6);
+}
+
+[data-diseno="crepusculo"] .hoja-puerta {
+  inset: 0;
+  background: linear-gradient(90deg, #7a1626, #8f1d2f 60%, #7a1626);
+  transform-origin: 0 50%;
+}
+
+[data-diseno="crepusculo"] .mirilla {
+  position: absolute;
+  inset: 8% 20% 60%;
+  border: calc(var(--u) * 0.5) solid #4f0d18;
+  background: linear-gradient(#ffd9a0, #e9a455);
+}
+
+[data-diseno="crepusculo"] .hoja-puerta svg {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 42%;
+  translate: -50% 0;
+  fill: none;
+  stroke: #e2ae38;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+[data-diseno="crepusculo"] .perilla {
+  position: absolute;
+  right: 8%;
+  top: 72%;
+  width: calc(var(--u) * 1.4);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e2ae38;
+}
+
+[data-diseno="crepusculo"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta {
+  transform: rotateY(-114deg);
+  filter: brightness(0.55);
+}
+
+/* Grada con la luz que cae de la casa. */
+[data-diseno="crepusculo"] .grada {
+  top: 100%;
+  left: calc(var(--u) * 41);
+  width: calc(var(--u) * 24);
+  height: calc(var(--u) * 2.6);
+  background: linear-gradient(#8d989b 0 35%, #454f53 35%);
+  box-shadow: 0 calc(var(--u) * 3) calc(var(--u) * 14) calc(var(--u) * 2) rgba(255, 190, 110, 0.25);
+}
+
+/* ---------- Interior: la ventana empañada ---------- */
+
+[data-diseno="crepusculo"] .cabecera h1 {
+  font-style: italic;
+  font-size: clamp(2.4rem, 10vw, 3.75rem);
+}
+
+/* El marco no tiene fondo: detrás de los vidrios solo está el bosque, así el
+   desenfoque de la niebla lo toma a él y no a la madera. */
+[data-diseno="crepusculo"] .marco {
+  position: relative;
+  padding: calc(var(--espacio) / 2);
+  border: 0.65rem solid var(--madera);
+  border-image: linear-gradient(
+      172deg,
+      #5a3a28,
+      var(--madera-clara) 12%,
+      #3a2519 30%,
+      var(--madera) 52%,
+      #352217 70%,
+      var(--madera-oscura)
+    )
+    1;
+  box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.75);
+}
+
+/* Alféizar. */
+[data-diseno="crepusculo"] .marco::after {
+  content: "";
+  position: absolute;
+  inset: calc(100% + 0.6rem) -1.3rem auto;
+  height: 1.4rem;
+  border-radius: 2px 2px 3px 3px;
+  background: linear-gradient(#6b4732, #5a3a28 38%, #2a1a11 38%, var(--madera) 55%, var(--madera-oscura));
+  box-shadow: 0 18px 30px -8px rgba(0, 0, 0, 0.85);
+}
+
+[data-diseno="crepusculo"] .pie {
+  margin-top: 3.4rem;
+}
+
+[data-diseno="crepusculo"] .casillas li {
+  opacity: 1;
+  box-shadow: 0 0 0 calc(var(--espacio) / 2 + 0.5px) var(--madera);
+}
+
+/* Nada de opacidad en los padres del vidrio: apagaría su desenfoque. */
+.dentro [data-diseno="crepusculo"] .casillas li {
+  animation: none;
+}
+
+.dentro [data-diseno="crepusculo"] :is(.casilla .num, .regalo) {
+  animation: encender 0.9s calc(var(--orden) * 50ms + 0.2s) both;
+}
+
+[data-diseno="crepusculo"] .casilla {
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+[data-diseno="crepusculo"] .casilla[data-forma="especial"] {
+  overflow: visible;
+}
+
+[data-diseno="crepusculo"] .casilla::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.55),
+    inset 1px 0 2px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 220, 190, 0.16);
+}
+
+[data-diseno="crepusculo"] .casilla .tapa {
+  filter: none !important;
+  translate: none !important;
+  pointer-events: none;
+}
+
+[data-diseno="crepusculo"] .tapa .hoja {
+  position: absolute;
+  inset: 0;
+}
+
+[data-diseno="crepusculo"] :is(.h2, .rollo) {
+  display: none;
+}
+
+[data-diseno="crepusculo"] .tapa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 58%,
+    rgba(255, 205, 140, 0.75),
+    rgba(255, 205, 140, 0.2) 45%,
+    transparent 72%
+  );
+  transition: opacity 0.6s var(--salida);
+}
+
+[data-diseno="crepusculo"] .h1 {
+  backdrop-filter: blur(6px) saturate(0.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(6px) saturate(0.8) brightness(1.1);
+  background:
+    var(--gotas),
+    linear-gradient(115deg, transparent 35%, rgba(255, 225, 190, 0.07) 48%, transparent 60%),
+    linear-gradient(180deg, rgba(205, 218, 223, 0.3), rgba(169, 188, 196, 0.2));
+  transition: opacity 0.6s var(--salida);
+}
+
+[data-diseno="crepusculo"] .cara {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+[data-diseno="crepusculo"] .cara .num {
+  font-family: var(--mano);
+  font-size: 46cqmin;
+  color: rgba(15, 26, 31, 0.55);
+  text-shadow: 0 1px 0 rgba(232, 238, 240, 0.25);
+}
+
+[data-diseno="crepusculo"] [data-estado="listo"] .tapa::before {
+  opacity: 0.8;
+}
+
+[data-diseno="crepusculo"] [data-estado="listo"] .h1 {
+  backdrop-filter: blur(5px) saturate(0.95) brightness(1.18);
+  -webkit-backdrop-filter: blur(5px) saturate(0.95) brightness(1.18);
+  background:
+    var(--gotas),
+    linear-gradient(115deg, transparent 35%, rgba(255, 225, 190, 0.1) 48%, transparent 60%),
+    linear-gradient(180deg, rgba(220, 210, 196, 0.24), rgba(196, 188, 176, 0.14) 60%, rgba(169, 188, 196, 0.24));
+}
+
+[data-diseno="crepusculo"] [data-estado="listo"] .cara .num {
+  color: rgba(15, 26, 31, 0.78);
+}
+
+[data-diseno="crepusculo"] [data-estado="listo"][data-hoy] .tapa::before {
+  opacity: 1;
+  animation: latir-luz 3.2s ease-in-out infinite;
+}
+
+[data-diseno="crepusculo"] .limpio {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: opacity 0.6s var(--salida);
+}
+
+[data-diseno="crepusculo"] .despejando :is(.h1, .limpio),
+[data-diseno="crepusculo"] .despejando .tapa::before {
+  opacity: 0;
+}
+
+/* Limpio: un corazón dibujado con el dedo en lo que queda de niebla. */
+[data-diseno="crepusculo"] .motivo .c {
+  fill: none;
+  stroke: #c23a4c;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  filter: drop-shadow(0 1px 2px rgba(15, 26, 31, 0.8));
+}
+
+[data-diseno="crepusculo"] [data-estado="abierto"] .motivo .c {
+  animation: dibujar 1.1s var(--salida) both;
+}
+
+[data-diseno="crepusculo"] .chico {
+  text-shadow: 0 1px 4px rgba(15, 26, 31, 0.9);
+}
+
+[data-diseno="crepusculo"] [data-forma="especial"] .chico {
+  text-shadow: none;
+}
+
+[data-diseno="crepusculo"] .casilla:not([data-forma="especial"]) .chico {
+  font-family: var(--mano);
+  font-weight: 400;
+  font-size: max(1.1rem, 12cqmin);
+}
+
+[data-diseno="crepusculo"] .rotulo {
+  gap: 6cqmin;
+}
+
+/* Los regalos esperan apoyados en la ventana, delante de un vidrio limpio. */
+[data-diseno="crepusculo"] .regalo {
+  filter: drop-shadow(0 0 14px rgba(255, 205, 140, 0.28));
+}
+
+[data-diseno="crepusculo"] [data-estado="cerrado"] .regalo {
+  filter: brightness(0.82);
+}
+
+[data-diseno="crepusculo"] .casilla[data-estado="abriendo"] .regalo {
+  animation: menear 0.55s;
+}
+
+[data-diseno="crepusculo"] [data-hoy][data-estado="listo"] .regalo {
+  animation: respirar 2.4s ease-in-out infinite;
+}
+
+[data-diseno="crepusculo"] :is(.nota-titulo, .nota-texto) {
+  font-family: var(--display);
+}
+
+[data-diseno="crepusculo"] .nota-titulo {
+  font-size: clamp(1.9rem, 8vw, 2.4rem);
+}
+
+[data-diseno="crepusculo"] .nota-texto {
+  font-size: 1.25rem;
+}
+
+[data-diseno="crepusculo"] .nota {
+  rotate: -0.8deg;
+}
+
+[data-diseno="crepusculo"] .nota-cerrar {
+  border-radius: 999px;
+  background: #0f1a1f;
+}
+
+[data-diseno="crepusculo"] .salir {
+  border-radius: 999px;
+  background: rgba(15, 26, 31, 0.6);
+}
+
+[data-diseno="crepusculo"] .salir:hover {
+  background: var(--tinta);
+}
+
+@keyframes dibujar {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes latir-luz {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (min-width: 62rem) {
+  [data-diseno="crepusculo"] .interior {
+    width: min(100% - 4rem, 72rem, 138vh);
+  }
+}
+
+/* Celular echado: aquí el letrero va arriba, para no tapar los pinos. */
+@media (orientation: landscape) and (max-height: 30rem) {
+  [data-diseno="crepusculo"] .fachada .letrero {
+    inset: 1rem 1rem auto;
+    width: auto;
+    text-align: center;
+  }
+}

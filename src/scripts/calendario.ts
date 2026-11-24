@@ -10,6 +10,7 @@ interface Cupon {
 
 interface Datos {
   anio: number;
+  abrirTodo: boolean;
   firma: string;
   cupones: Cupon[];
 }
@@ -55,9 +56,7 @@ function fechaDeHoy(): Date {
 const hoy = fechaDeHoy();
 const inicioHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
 const fechaDe = (dia: number) => new Date(datos.anio, 11, dia);
-// TEMPORAL (solo para probar): true abre todos los vidrios sin validar fecha. Volver a false antes de entregar.
-const SIN_VALIDAR_FECHA = true;
-const disponible = (dia: number) => SIN_VALIDAR_FECHA || inicioHoy >= fechaDe(dia);
+const disponible = (dia: number) => datos.abrirTodo || inicioHoy >= fechaDe(dia);
 const esHoy = (dia: number) => inicioHoy.getTime() === fechaDe(dia).getTime();
 const diasHasta = (dia: number) => Math.round((fechaDe(dia).getTime() - inicioHoy.getTime()) / 86400000);
 
