@@ -1,0 +1,86 @@
+---
+// Diseño 2, "Jengibre": casita de galleta con glaseado; cada casilla es una
+// galleta que se parte en dos.
+import "@fontsource-variable/comfortaa";
+import Casa from "../layouts/Casa.astro";
+import "../styles/jengibre.css";
+
+// Glaseado que chorrea del techo: una onda de gotas de distinto largo.
+const largos = [5, 9, 6, 11, 7, 5, 10, 6, 8, 5];
+const ancho = 76 / largos.length;
+const chorreo =
+  "M12 58" +
+  largos
+    .map((l, i) => {
+      const x = 12 + i * ancho;
+      return `v${l - 3}a${ancho / 2} ${ancho / 2} 0 0 0 ${ancho} 0V${i === largos.length - 1 ? 52 : 58}`.replace(
+        "v",
+        `H${x.toFixed(2)}v`,
+      );
+    })
+    .join("") +
+  "H12Z";
+
+// Gomitas a lo largo de cada lado del techo.
+const gomitas = [0.1, 0.3, 0.5, 0.7, 0.9].flatMap((t, i) => [
+  { x: 50 - 44 * t, y: 18 + 37 * t, c: i % 3 },
+  { x: 50 + 44 * t, y: 18 + 37 * t, c: (i + 1) % 3 },
+]);
+---
+
+<Casa
+  diseno="jengibre"
+  acomodo="espejo"
+  variantes={4}
+  colorTema="#f2b13c"
+  colorIcono="#b4612a"
+  confeti={["#f6c84c", "#fff3df", "#2f8a5b", "#f08a35", "#e2ae38"]}
+  migas={["#c8752f", "#a85a20", "#e39a50"]}
+>
+  <Fragment slot="fachada">
+    <div class="sol"></div>
+    <div class="nieve"></div>
+    <div class="paleta izq"></div>
+    <div class="paleta der"></div>
+    <div class="casita">
+      <svg viewBox="0 0 100 130" aria-hidden="true">
+        <path class="galleta-oscura" d="M68 14h11v30H68z"></path>
+        <path class="glaseado" d="M66 11h15v7a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 2 2.5 2.5 0 0 1-5-2Z"></path>
+        <path class="galleta" d="M12 50h76v80H12Z"></path>
+        <path class="galleta" d="M50 22 90 56H10Z"></path>
+        <path class="glaseado" d={chorreo}></path>
+        <path class="techo" d="M50 8 100 52a4 4 0 0 1-5 6L50 20 5 58a4 4 0 0 1-5-6Z"></path>
+        <path class="hilo" d="M5 54 50 14 95 54"></path>
+        {gomitas.map((g) => <circle class={`gomita gomita-${g.c}`} cx={g.x} cy={g.y - 2} r="3" />)}
+        <circle class="ventana" cx="50" cy="40" r="8.5"></circle>
+        <path class="hilo fino" d="M50 31.5v17M41.5 40h17"></path>
+        <circle class="hilo" cx="50" cy="40" r="8.5"></circle>
+        <g class="ventanas">
+          <path class="ventana" d="M18 92V83a6 6 0 0 1 12 0v9ZM70 92V83a6 6 0 0 1 12 0v9Z"></path>
+          <path class="hilo fino" d="M24 77v15M18 85h12M76 77v15M70 85h12"></path>
+          <path class="hilo" d="M18 92V83a6 6 0 0 1 12 0v9ZM70 92V83a6 6 0 0 1 12 0v9Z"></path>
+        </g>
+        <g class="botones">
+          <circle class="gomita gomita-0" cx="24" cy="104" r="2.6"></circle>
+          <circle class="gomita gomita-1" cx="24" cy="113" r="2.6"></circle>
+          <circle class="gomita gomita-2" cx="24" cy="122" r="2.6"></circle>
+          <circle class="gomita gomita-2" cx="76" cy="104" r="2.6"></circle>
+          <circle class="gomita gomita-0" cx="76" cy="113" r="2.6"></circle>
+          <circle class="gomita gomita-1" cx="76" cy="122" r="2.6"></circle>
+        </g>
+      </svg>
+      <div class="dintel"></div>
+      <div class="vano" id="vano">
+        <button type="button" class="puerta" id="puerta" aria-label="Tocar la puerta y entrar a la casa">
+          <span class="hoja-puerta">
+            <svg viewBox="0 0 30 52" aria-hidden="true">
+              <path
+                d="M15 24.5C9.5 20.5 7.5 17 9.8 14c2-2.4 4.4-1.2 5.2 1.2.8-2.4 3.2-3.6 5.2-1.2 2.3 3 .3 6.5-5.2 10.5Z"></path>
+              <circle cx="24.5" cy="32" r="1.8"></circle>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </Fragment>
+</Casa>

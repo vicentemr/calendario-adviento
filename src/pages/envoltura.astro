@@ -1,0 +1,46 @@
+---
+// Diseño 3, "Envoltura": la casa es un regalo con lazo; cada casilla está
+// envuelta en papel que se enrolla.
+import "@fontsource/caprasimo/400.css";
+import Casa from "../layouts/Casa.astro";
+import "../styles/envoltura.css";
+---
+
+<Casa
+  diseno="envoltura"
+  acomodo="volteado"
+  variantes={8}
+  colorTema="#fff1d4"
+  colorIcono="#c42f27"
+  confeti={["#e2ae38", "#c42f27", "#1d6a4a", "#ee7f2d", "#f9d56e"]}
+>
+  <Fragment slot="fachada">
+    <div class="suelo"></div>
+    <div class="arbol a1"></div>
+    <div class="arbol a2"></div>
+    <div class="arbol a3"></div>
+    <div class="arbol a4"></div>
+    <div class="casa-regalo">
+      <svg class="cuerpo" viewBox="0 0 100 120" aria-hidden="true">
+        <path class="muro" d="M50 22 94 58v62H6V58Z"></path>
+        <path class="ventana" d="M16 74h16v16H16zM68 74h16v16H68z"></path>
+        <path class="cruceta" d="M24 74v16M16 82h16M76 74v16M68 82h16"></path>
+      </svg>
+      <svg class="amarre" viewBox="0 0 100 120" aria-hidden="true">
+        <path class="cinta-v" d="M50 22 55 26.1V62H45V26.1Z"></path>
+        <path class="cinta-h" d="M6 58h88v9H6z"></path>
+        <path class="cinta-cola" d="M48 22 34 36l8-1 2 7 9-19ZM52 22l14 14-8-1-2 7-9-19Z"></path>
+        <path class="cinta-lazo izq" d="M50 22C40-2 16-8 14 5s14 22 36 17Z"></path>
+        <path class="cinta-lazo der" d="M50 22C60-2 84-8 86 5S72 27 50 22Z"></path>
+        <circle class="cinta-nudo" cx="50" cy="21" r="5.5"></circle>
+      </svg>
+      <div class="umbral"></div>
+      <div class="vano" id="vano">
+        <button type="button" class="puerta" id="puerta" aria-label="Tocar la puerta y entrar a la casa">
+          <span class="hoja-puerta arriba"><i></i></span>
+          <span class="hoja-puerta abajo"><i></i></span>
+        </button>
+      </div>
+    </div>
+  </Fragment>
+</Casa>

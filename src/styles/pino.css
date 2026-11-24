@@ -1,0 +1,490 @@
+[data-diseno="pino"],
+:root:has([data-diseno="pino"]) {
+  --fondo: #0b2c21;
+  --exterior: #14493a;
+  --tinta: #ffedc4;
+  --letrero: #ffedc4;
+  --acento: #f0b93a;
+  --luz: #ffc95c;
+  --display: "Young Serif", Georgia, serif;
+  --radio: 3px;
+  --espacio: 0.5rem;
+  --cinta: #b3261e;
+  --hueco: radial-gradient(circle at 50% 55%, #ffe2a0, #f6bd4c);
+  --hueco-tinta: #5a2b06;
+  --ma: #17553f;
+  --mb: #b3261e;
+  --hueco-oro: radial-gradient(circle at 50% 55%, #fff5d2, #f4c64d);
+  --oro-a: #17553f;
+  --oro-b: #b3261e;
+  --papel: #fff3d6;
+  --papel-tinta: #10352a;
+  --nota-acento: #a8211a;
+  --velo: rgba(5, 22, 16, 0.78);
+}
+
+/* ---------- Fachada ---------- */
+
+[data-diseno="pino"] .fachada {
+  --u: min(1vw, 0.52vh);
+  --u: min(1vw, 0.52dvh);
+}
+
+/* Los números de esta letra bajan de la línea: les damos aire. */
+[data-diseno="pino"] .rotulo {
+  gap: 6cqmin;
+}
+
+[data-diseno="pino"] .pared {
+  inset: 0;
+  background: repeating-linear-gradient(
+    #14493a 0 calc(var(--u) * 10 - 2px),
+    #103c30 calc(var(--u) * 10 - 2px) calc(var(--u) * 10)
+  );
+}
+
+[data-diseno="pino"] .piso {
+  inset: auto 0 0;
+  height: calc(var(--u) * 20);
+  background: #0a271e;
+}
+
+[data-diseno="pino"] .escalon {
+  left: 50%;
+  bottom: calc(var(--u) * 14);
+  width: calc(var(--u) * 82);
+  height: calc(var(--u) * 7);
+  translate: -50% 0;
+  border-radius: calc(var(--u) * 1) calc(var(--u) * 1) 0 0;
+  background: linear-gradient(#e0702f 0 30%, #b9541d 30%);
+}
+
+[data-diseno="pino"] .marco-puerta {
+  left: 50%;
+  bottom: calc(var(--u) * 21);
+  width: calc(var(--u) * 66);
+  height: calc(var(--u) * 118);
+  translate: -50% 0;
+  border-radius: calc(var(--u) * 33) calc(var(--u) * 33) 0 0;
+  background: #e9b643;
+}
+
+[data-diseno="pino"] .vano {
+  left: 50%;
+  bottom: calc(var(--u) * 21);
+  width: calc(var(--u) * 58);
+  height: calc(var(--u) * 114);
+  translate: -50% 0;
+  border-radius: calc(var(--u) * 29) calc(var(--u) * 29) 0 0;
+}
+
+[data-diseno="pino"] .hoja-puerta {
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  background: #b3261e;
+}
+
+[data-diseno="pino"] .hoja-puerta.izq {
+  left: 0;
+  border-radius: calc(var(--u) * 29) 0 0 0;
+  transform-origin: 0 50%;
+  box-shadow: inset -1px 0 #7c130e;
+}
+
+[data-diseno="pino"] .hoja-puerta.der {
+  right: 0;
+  border-radius: 0 calc(var(--u) * 29) 0 0;
+  transform-origin: 100% 50%;
+  box-shadow: inset 1px 0 #7c130e;
+}
+
+[data-diseno="pino"] .panel {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  border: calc(var(--u) * 0.8) solid #8d1913;
+}
+
+[data-diseno="pino"] .panel.arriba {
+  top: 14%;
+  height: 43%;
+}
+
+[data-diseno="pino"] .izq .panel.arriba {
+  border-top-left-radius: calc(var(--u) * 17);
+}
+
+[data-diseno="pino"] .der .panel.arriba {
+  border-top-right-radius: calc(var(--u) * 17);
+}
+
+[data-diseno="pino"] .panel.abajo {
+  bottom: 8%;
+  height: 28%;
+}
+
+[data-diseno="pino"] .perilla {
+  position: absolute;
+  top: 59.5%;
+  width: calc(var(--u) * 4);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #f3c65a;
+}
+
+[data-diseno="pino"] .izq .perilla {
+  right: 7%;
+}
+
+[data-diseno="pino"] .der .perilla {
+  left: 7%;
+}
+
+[data-diseno="pino"] .corona {
+  position: absolute;
+  top: 20%;
+  width: calc(var(--u) * 33);
+  aspect-ratio: 1;
+  overflow: visible;
+  fill: #1f6b4d;
+}
+
+[data-diseno="pino"] .izq .corona {
+  left: 100%;
+  translate: -50% 0;
+}
+
+[data-diseno="pino"] .der .corona {
+  left: 0;
+  translate: -50% 0;
+}
+
+[data-diseno="pino"] .corona .aro {
+  fill: none;
+  stroke: #123f30;
+  stroke-width: 9;
+}
+
+[data-diseno="pino"] .corona ellipse:nth-of-type(odd) {
+  fill: #2c8a63;
+}
+
+[data-diseno="pino"] .baya {
+  fill: #f0953a;
+}
+
+[data-diseno="pino"] .mono-corona {
+  fill: #f3c65a;
+}
+
+[data-diseno="pino"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta.izq {
+  transform: rotateY(-112deg);
+  filter: brightness(0.6);
+}
+
+[data-diseno="pino"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta.der {
+  transform: rotateY(112deg);
+  filter: brightness(0.6);
+}
+
+[data-diseno="pino"] .guirnalda {
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+}
+
+[data-diseno="pino"] .guirnalda svg {
+  flex: none;
+  width: 34rem;
+  overflow: visible;
+}
+
+[data-diseno="pino"] .letrero {
+  top: max(calc(env(safe-area-inset-top) + 5.25rem), (100vh - 175vw) * 0.9);
+}
+
+[data-diseno="pino"] .cable {
+  fill: none;
+  stroke: #0a271e;
+  stroke-width: 1.4;
+}
+
+[data-diseno="pino"] .foco {
+  animation: latir 2.8s ease-in-out infinite;
+}
+
+[data-diseno="pino"] .foco-0 {
+  fill: #f3c65a;
+}
+
+[data-diseno="pino"] .foco-1 {
+  fill: #e0472f;
+  animation-delay: 0.7s;
+}
+
+[data-diseno="pino"] .foco-2 {
+  fill: #ffe08a;
+  animation-delay: 1.4s;
+}
+
+[data-diseno="pino"] .foco-3 {
+  fill: #f0953a;
+  animation-delay: 2.1s;
+}
+
+[data-diseno="pino"] .farol {
+  top: auto;
+  bottom: calc(var(--u) * 98);
+  width: calc(var(--u) * 8);
+  height: calc(var(--u) * 13);
+  border-radius: calc(var(--u) * 4) calc(var(--u) * 4) calc(var(--u) * 1) calc(var(--u) * 1);
+  background: #ffd36e;
+  border: calc(var(--u) * 1) solid #0a271e;
+  box-shadow: 0 0 calc(var(--u) * 14) calc(var(--u) * 4) rgba(255, 205, 95, 0.38);
+}
+
+[data-diseno="pino"] .farol.izq {
+  right: calc(50% + var(--u) * 38);
+}
+
+[data-diseno="pino"] .farol.der {
+  left: calc(50% + var(--u) * 38);
+}
+
+[data-diseno="pino"] .maceta {
+  bottom: calc(var(--u) * 14);
+  width: calc(var(--u) * 24);
+  height: calc(var(--u) * 52);
+}
+
+[data-diseno="pino"] .maceta.izq {
+  right: calc(50% + var(--u) * 32);
+}
+
+[data-diseno="pino"] .maceta.der {
+  left: calc(50% + var(--u) * 32);
+}
+
+[data-diseno="pino"] .maceta i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18%;
+  height: 46%;
+  background: #2c8a63;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+[data-diseno="pino"] .maceta i:nth-child(2) {
+  left: 10%;
+  right: 10%;
+  bottom: 36%;
+  height: 40%;
+  background: #35996f;
+}
+
+[data-diseno="pino"] .maceta i:nth-child(3) {
+  left: 22%;
+  right: 22%;
+  bottom: 56%;
+  height: 34%;
+  background: #43a97d;
+}
+
+[data-diseno="pino"] .maceta b {
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  bottom: 0;
+  height: 19%;
+  background: #e9b643;
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+}
+
+/* ---------- Casillas: puertitas ---------- */
+
+[data-diseno="pino"] .interior {
+  position: relative;
+}
+
+/* Luz de la sala: una sola lámpara cálida desde arriba. */
+[data-diseno="pino"] .interior::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 90% 60% at 50% 0, #1a5d45, transparent);
+}
+
+[data-diseno="pino"] .casilla {
+  --tono: #b3261e;
+  --claro: #ffedc4;
+}
+
+[data-diseno="pino"] .casilla[data-tono="1"] {
+  --tono: #e3a92f;
+  --claro: #4a1608;
+}
+
+[data-diseno="pino"] .casilla[data-tono="2"] {
+  --tono: #2a7d59;
+}
+
+[data-diseno="pino"] .casilla[data-tono="3"] {
+  --tono: #dd6a28;
+  --claro: #35130a;
+}
+
+[data-diseno="pino"] .casilla[data-tono="4"] {
+  --tono: #f6d88e;
+  --claro: #17553f;
+}
+
+[data-diseno="pino"] .tapa {
+  perspective: 160cqmax;
+}
+
+[data-diseno="pino"] .hoja {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radio);
+  background: var(--tono);
+  color: var(--claro);
+  transform-origin: 0 50%;
+}
+
+[data-diseno="pino"] .cara {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* Panel tallado y perilla. */
+[data-diseno="pino"] .cara::before {
+  content: "";
+  position: absolute;
+  inset: 9cqmin;
+  border: max(1.5px, 1.4cqmin) solid currentColor;
+  border-radius: calc(var(--radio) - 1px);
+  opacity: 0.38;
+}
+
+[data-diseno="pino"] .cara::after {
+  content: "";
+  position: absolute;
+  right: 13.5cqmin;
+  top: 50%;
+  width: 6cqmin;
+  aspect-ratio: 1;
+  margin-top: -3cqmin;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+[data-diseno="pino"] :is([data-forma="cuadro"], [data-forma="alto"]) .num {
+  font-size: 37cqmin;
+  margin-right: 9cqmin;
+}
+
+[data-diseno="pino"] .h2 {
+  display: none;
+}
+
+/* Anchas y grandes: dos hojas, con el número partido al medio. */
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .hoja {
+  overflow: hidden;
+}
+
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .h1 {
+  right: 50%;
+  border-radius: var(--radio) 0 0 var(--radio);
+}
+
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .h2 {
+  display: block;
+  left: 50%;
+  border-radius: 0 var(--radio) var(--radio) 0;
+  transform-origin: 100% 50%;
+  box-shadow: inset 2px 0 rgba(0, 0, 0, 0.28);
+}
+
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .cara {
+  width: 100cqw;
+}
+
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .h2 .cara {
+  left: auto;
+  right: 0;
+}
+
+[data-diseno="pino"] :is([data-forma="ancho"], [data-forma="grande"]) .cara::after {
+  display: none;
+}
+
+[data-diseno="pino"] [data-forma="grande"] .cara::before {
+  border-radius: 50cqw 50cqw 0 0;
+}
+
+/* Altas: puerta en arco. */
+[data-diseno="pino"] [data-forma="alto"] .cara::before {
+  border-radius: 50cqw 50cqw 0 0;
+}
+
+[data-diseno="pino"] [data-estado="listo"][data-hoy]:not([data-forma="especial"]) {
+  box-shadow: 0 0 0 3px #ffd668;
+}
+
+[data-diseno="pino"] [data-estado="listo"][data-hoy]:not([data-forma="especial"])::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  box-shadow: 0 0 26px 8px rgba(255, 205, 95, 0.6);
+  animation: latir 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+[data-diseno="pino"] [data-estado="abriendo"] .h1 {
+  animation: hoja-izq 0.95s cubic-bezier(0.5, 0, 0.2, 1) both;
+}
+
+[data-diseno="pino"] [data-estado="abriendo"] .h2 {
+  animation: hoja-der 0.95s cubic-bezier(0.5, 0, 0.2, 1) both;
+}
+
+@keyframes hoja-izq {
+  18% {
+    transform: rotateY(-8deg);
+  }
+  92% {
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(-98deg);
+    filter: brightness(0.65);
+    opacity: 0;
+  }
+}
+
+@keyframes hoja-der {
+  18% {
+    transform: rotateY(8deg);
+  }
+  92% {
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(98deg);
+    filter: brightness(0.65);
+    opacity: 0;
+  }
+}
+
+/* Abierta: un nicho iluminado. */
+[data-diseno="pino"] .hueco {
+  box-shadow: inset 0 0.35rem 0.6rem rgba(90, 40, 0, 0.35);
+}

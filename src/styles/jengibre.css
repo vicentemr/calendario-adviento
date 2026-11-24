@@ -1,0 +1,498 @@
+[data-diseno="jengibre"],
+:root:has([data-diseno="jengibre"]) {
+  --fondo: #9c1f1a;
+  --exterior: #f2b13c;
+  --tinta: #fff3df;
+  --letrero: #7a1511;
+  --acento: #ffd257;
+  --luz: #ff9d3c;
+  --display: "Comfortaa Variable", sans-serif;
+  --radio: 1rem;
+  --espacio: 0.6rem;
+  --cinta: #17694a;
+  --glaseado: #fff3df;
+  --hueco: #7c1511;
+  --hueco-tinta: #ffd98a;
+  --ma: #fff3df;
+  --mb: #ffd257;
+  --hueco-oro: radial-gradient(circle at 50% 55%, #fff3cb, #f3c54f);
+  --oro-a: #17694a;
+  --oro-b: #9c1f1a;
+  --papel: #fff3df;
+  --papel-tinta: #4c1f0a;
+  --nota-acento: #9c1f1a;
+  --velo: rgba(62, 8, 6, 0.8);
+}
+
+[data-diseno="jengibre"] :is(.saludo, .cabecera h1, .nota-titulo, .num) {
+  font-weight: 700;
+}
+
+[data-diseno="jengibre"] :is(.cabecera h1, .saludo) {
+  font-size: clamp(1.9rem, min(8.5vw, 6vh), 3.2rem);
+}
+
+[data-diseno="jengibre"] .nota-titulo {
+  font-size: clamp(1.5rem, 6.5vw, 1.9rem);
+}
+
+/* ---------- Fachada ---------- */
+
+[data-diseno="jengibre"] .sol {
+  left: 50%;
+  bottom: calc(var(--u) * 34);
+  width: calc(var(--u) * 112);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: #f7c65d;
+}
+
+[data-diseno="jengibre"] .nieve {
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  height: calc(var(--u) * 30 + 2vh);
+  translate: -50% 0;
+  background: #fff3df;
+}
+
+/* Borde ondulado del glaseado del piso. */
+[data-diseno="jengibre"] .nieve::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--u) * -5.9) 0 auto;
+  height: calc(var(--u) * 6);
+  background: radial-gradient(ellipse 50% 100% at 50% 100%, #fff3df 98%, transparent) 50% 0 / calc(var(--u) * 25) 100%;
+}
+
+[data-diseno="jengibre"] .casita {
+  left: 50%;
+  bottom: calc(var(--u) * 22);
+  width: calc(var(--u) * 92);
+  aspect-ratio: 100 / 130;
+  translate: -50% 0;
+}
+
+[data-diseno="jengibre"] .casita > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+[data-diseno="jengibre"] .galleta {
+  fill: #c4702c;
+}
+
+[data-diseno="jengibre"] .galleta-oscura {
+  fill: #9a4d18;
+}
+
+[data-diseno="jengibre"] .techo {
+  fill: #8c4114;
+}
+
+[data-diseno="jengibre"] .glaseado {
+  fill: var(--glaseado);
+}
+
+[data-diseno="jengibre"] .hilo {
+  fill: none;
+  stroke: var(--glaseado);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+[data-diseno="jengibre"] .hilo.fino {
+  stroke-width: 1.2;
+}
+
+[data-diseno="jengibre"] .ventana {
+  fill: #ffd257;
+}
+
+[data-diseno="jengibre"] .gomita-0 {
+  fill: #d22f24;
+}
+
+[data-diseno="jengibre"] .gomita-1 {
+  fill: #2f8a5b;
+}
+
+[data-diseno="jengibre"] .gomita-2 {
+  fill: #ffcf4a;
+}
+
+[data-diseno="jengibre"] .dintel,
+[data-diseno="jengibre"] .vano {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  border-radius: 50% 50% 0 0 / 29% 29% 0 0;
+}
+
+/* Perlitas de glaseado alrededor de la puerta. */
+[data-diseno="jengibre"] .dintel {
+  width: 33%;
+  height: 44%;
+  border: calc(var(--u) * 1.9) dotted var(--glaseado);
+  border-bottom: 0;
+}
+
+[data-diseno="jengibre"] .vano {
+  width: 27.5%;
+  height: 41.4%;
+}
+
+[data-diseno="jengibre"] .hoja-puerta {
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #17694a;
+  transform-origin: 0 50%;
+}
+
+[data-diseno="jengibre"] .hoja-puerta svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--glaseado);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+[data-diseno="jengibre"] .hoja-puerta circle {
+  fill: #ffd257;
+  stroke: none;
+}
+
+[data-diseno="jengibre"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta {
+  transform: rotateY(-114deg);
+  filter: brightness(0.65);
+}
+
+/* Bastones de caramelo. */
+[data-diseno="jengibre"] .paleta {
+  bottom: calc(var(--u) * 20);
+  width: calc(var(--u) * 3.4);
+  height: calc(var(--u) * 34);
+  border-radius: calc(var(--u) * 2);
+  background: repeating-linear-gradient(
+    -35deg,
+    #d22f24 0 calc(var(--u) * 2.6),
+    #fff3df calc(var(--u) * 2.6) calc(var(--u) * 5.2)
+  );
+}
+
+[data-diseno="jengibre"] .paleta::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 84%;
+  width: calc(var(--u) * 15);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 10deg, #d22f24 0 30deg, #fff3df 30deg 60deg);
+}
+
+[data-diseno="jengibre"] .paleta.izq {
+  right: calc(50% + var(--u) * 39);
+}
+
+[data-diseno="jengibre"] .paleta.der {
+  left: calc(50% + var(--u) * 39);
+  height: calc(var(--u) * 26);
+}
+
+@media (min-aspect-ratio: 3 / 4) {
+  [data-diseno="jengibre"] .paleta.izq {
+    right: calc(50% + var(--u) * 56);
+  }
+
+  [data-diseno="jengibre"] .paleta.der {
+    left: calc(50% + var(--u) * 56);
+  }
+}
+
+/* ---------- Interior ---------- */
+
+/* Glaseado que chorrea desde arriba de la página. */
+[data-diseno="jengibre"] .interior {
+  padding-top: max(5.25rem, env(safe-area-inset-top));
+}
+
+[data-diseno="jengibre"] .interior::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3.6rem;
+  background:
+    radial-gradient(circle at 1.25rem 1.6rem, #fff3df 1.22rem, transparent 1.27rem) 0 0.1rem / 7.5rem 100%,
+    radial-gradient(circle at 3.75rem 2.2rem, #fff3df 1.22rem, transparent 1.27rem) 0 0 / 7.5rem 100%,
+    radial-gradient(circle at 6.25rem 1.1rem, #fff3df 1.22rem, transparent 1.27rem) 0 0.2rem / 7.5rem 100%,
+    linear-gradient(#fff3df, #fff3df) 2.5rem 0 / 7.5rem 2.2rem,
+    linear-gradient(#fff3df, #fff3df) 0 0 / 100% 1.3rem no-repeat;
+  background-repeat: repeat-x;
+}
+
+/* ---------- Casillas: galletas ---------- */
+
+[data-diseno="jengibre"] .casilla {
+  --masa: #bd6c2b;
+}
+
+[data-diseno="jengibre"] .casilla[data-tono="1"] {
+  --masa: #a75a20;
+}
+
+[data-diseno="jengibre"] .casilla[data-tono="2"] {
+  --masa: #c97a34;
+}
+
+[data-diseno="jengibre"] [data-estado="cerrado"] {
+  --apagado: 0.8;
+}
+
+[data-diseno="jengibre"] .casilla[data-forma="cuadro"]:is([data-tono="1"], [data-tono="3"]) {
+  --radio: 50%;
+}
+
+[data-diseno="jengibre"] .casilla[data-forma="alto"] {
+  --radio: 50cqw;
+}
+
+[data-diseno="jengibre"] .casilla[data-forma="grande"] {
+  --radio: 1.5rem;
+}
+
+[data-diseno="jengibre"] .casilla[data-forma="especial"] {
+  --radio: 0.6rem;
+}
+
+/* El radio en % se resuelve en cada capa, por eso se repite aquí. */
+[data-diseno="jengibre"] .casilla > span,
+[data-diseno="jengibre"] .cara {
+  border-radius: var(--radio);
+}
+
+[data-diseno="jengibre"] .casilla[data-forma="alto"] {
+  border-radius: 10rem;
+}
+
+[data-diseno="jengibre"] .hoja {
+  position: absolute;
+  inset: 0;
+}
+
+[data-diseno="jengibre"] .cara {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--masa);
+  color: var(--glaseado);
+  box-shadow: inset 0 -0.3rem 0 rgba(90, 35, 5, 0.28);
+}
+
+/* Cordón de glaseado. */
+[data-diseno="jengibre"] .cara::before {
+  content: "";
+  position: absolute;
+  inset: 8cqmin;
+  border: max(2.5px, 3.4cqmin) solid var(--glaseado);
+  border-radius: calc(var(--radio) - 8cqmin);
+}
+
+[data-diseno="jengibre"] [data-tono="1"] .cara::before,
+[data-diseno="jengibre"] [data-tono="3"] .cara::before {
+  border-style: dotted;
+  border-width: max(3px, 4.6cqmin);
+}
+
+[data-diseno="jengibre"] [data-tono="1"][data-forma="cuadro"] .cara::before,
+[data-diseno="jengibre"] [data-tono="3"][data-forma="cuadro"] .cara::before {
+  border-radius: 50%;
+}
+
+[data-diseno="jengibre"] :is([data-forma="grande"], [data-forma="ancho"], [data-forma="alto"]) .cara::before {
+  border-width: max(2.5px, 2.8cqmin);
+}
+
+[data-diseno="jengibre"] .num {
+  font-size: 34cqmin;
+  letter-spacing: -0.04em;
+}
+
+[data-diseno="jengibre"] [data-forma="grande"] .num {
+  font-size: 40cqmin;
+}
+
+/* Las galletas grandes llevan gomitas. */
+[data-diseno="jengibre"] :is([data-forma="grande"], [data-forma="ancho"], [data-forma="alto"]) .cara::after {
+  content: "";
+  position: absolute;
+  background:
+    radial-gradient(circle at 16.6% 50%, #ffcf4a 2.9cqmin, transparent 3.1cqmin),
+    radial-gradient(circle at 50% 50%, #d22f24 2.9cqmin, transparent 3.1cqmin),
+    radial-gradient(circle at 83.3% 50%, #1f7a52 2.9cqmin, transparent 3.1cqmin);
+  width: 36cqmin;
+  height: 8cqmin;
+  left: 50%;
+  bottom: 18cqmin;
+  translate: -50% 0;
+}
+
+[data-diseno="jengibre"] [data-forma="ancho"] .cara::after {
+  background:
+    radial-gradient(circle at 10% 50%, #ffcf4a 5cqmin, transparent 5.3cqmin),
+    radial-gradient(circle at 90% 50%, #1f7a52 5cqmin, transparent 5.3cqmin);
+  width: 66cqw;
+  height: 14cqmin;
+  bottom: calc(50% - 7cqmin);
+}
+
+[data-diseno="jengibre"] [data-forma="alto"] .cara::after {
+  background:
+    radial-gradient(circle at 50% 8%, #ffcf4a 5cqmin, transparent 5.3cqmin),
+    radial-gradient(circle at 50% 92%, #1f7a52 5cqmin, transparent 5.3cqmin);
+  width: 14cqmin;
+  height: 62cqh;
+  bottom: 19cqh;
+}
+
+/* La línea por donde se parte. */
+[data-diseno="jengibre"] .h1 {
+  clip-path: polygon(0 0, 56% 0, 46% 18%, 57% 36%, 44% 54%, 55% 74%, 47% 100%, 0 100%);
+}
+
+[data-diseno="jengibre"] .h2 {
+  clip-path: polygon(100% 0, 55.8% 0, 45.8% 18%, 56.8% 36%, 43.8% 54%, 54.8% 74%, 46.8% 100%, 100% 100%);
+}
+
+[data-diseno="jengibre"] [data-forma="alto"] .h1 {
+  clip-path: polygon(0 0, 100% 0, 100% 46%, 80% 54%, 62% 45%, 42% 55%, 20% 46%, 0 53%);
+}
+
+[data-diseno="jengibre"] [data-forma="alto"] .h2 {
+  clip-path: polygon(0 100%, 100% 100%, 100% 45.8%, 80% 53.8%, 62% 44.8%, 42% 54.8%, 20% 45.8%, 0 52.8%);
+}
+
+[data-diseno="jengibre"] [data-estado="abriendo"] .tapa {
+  animation: menear 0.4s;
+}
+
+[data-diseno="jengibre"] [data-estado="abriendo"] .h1 {
+  animation: partir-izq 1.05s 0.3s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+[data-diseno="jengibre"] [data-estado="abriendo"] .h2 {
+  animation: partir-der 1.05s 0.3s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+[data-diseno="jengibre"] [data-estado="abriendo"] {
+  --demora-motivo: 0.65s;
+}
+
+@keyframes partir-izq {
+  22% {
+    transform: translate(-5%, -2%) rotate(-4deg);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  }
+  75% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(-34%, 70%) rotate(-38deg);
+    opacity: 0;
+  }
+}
+
+@keyframes partir-der {
+  22% {
+    transform: translate(5%, -2%) rotate(4deg);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  }
+  75% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(34%, 70%) rotate(38deg);
+    opacity: 0;
+  }
+}
+
+/* Abierta: el hueco que dejó, con el motivo dibujado en glaseado. */
+[data-diseno="jengibre"] .hueco {
+  box-shadow: inset 0 0 0 2px rgba(255, 217, 138, 0.28);
+}
+
+[data-diseno="jengibre"] .casilla:not([data-forma="especial"]) .motivo :is(.a, .b) {
+  fill: none;
+  stroke: var(--ma);
+  stroke-width: 2.8;
+  stroke-linejoin: round;
+}
+
+[data-diseno="jengibre"] .casilla:not([data-forma="especial"]) .motivo .b {
+  stroke: var(--mb);
+}
+
+/* En las redondas el numerito va centrado arriba. */
+[data-diseno="jengibre"] :is([data-forma="alto"], [data-forma="cuadro"]) .chico {
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+[data-diseno="jengibre"] [data-forma="cuadro"] .motivo {
+  translate: 0 7cqmin;
+  width: 46cqmin;
+  height: 46cqmin;
+}
+
+[data-diseno="jengibre"] [data-estado="listo"][data-hoy]:not([data-forma="especial"]) .tapa {
+  animation: antojo 2.2s ease-in-out infinite;
+}
+
+[data-diseno="jengibre"] [data-estado="listo"][data-hoy]:not([data-forma="especial"]) .cara::before {
+  border-color: #ffd257;
+}
+
+@keyframes antojo {
+  0%,
+  60%,
+  100% {
+    transform: none;
+  }
+  70% {
+    transform: rotate(-4deg) scale(1.05);
+  }
+  80% {
+    transform: rotate(4deg) scale(1.05);
+  }
+  90% {
+    transform: rotate(-2deg);
+  }
+}
+
+[data-diseno="jengibre"] .nota {
+  border-radius: 1.4rem;
+}
+
+[data-diseno="jengibre"] .nota:not(.dorada) {
+  box-shadow:
+    inset 0 0 0 0.5rem #cb7a34,
+    0 30px 70px -15px rgba(0, 0, 0, 0.65);
+  padding: 2.4rem 2rem 1.9rem;
+}
+
+[data-diseno="jengibre"] :is(.nota-cerrar, .salir) {
+  border-radius: 999px;
+}

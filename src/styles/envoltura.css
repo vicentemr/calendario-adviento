@@ -1,0 +1,509 @@
+[data-diseno="envoltura"],
+:root:has([data-diseno="envoltura"]) {
+  --fondo: #fff1d4;
+  --exterior: #fff1d4;
+  --tinta: #12442f;
+  --letrero: #12442f;
+  --acento: #c42f27;
+  --luz: #ffd166;
+  --display: "Caprasimo", Georgia, serif;
+  --radio: 6px;
+  --espacio: 0.6rem;
+  --cinta: #c42f27;
+  --hueco: #fffaf0;
+  --hueco-tinta: #12442f;
+  --ma: #1d6a4a;
+  --mb: #c42f27;
+  --hueco-oro: radial-gradient(circle at 50% 55%, #fffaf0, #f9d56e);
+  --oro-a: #1d6a4a;
+  --oro-b: #c42f27;
+  --papel: #fffaf0;
+  --papel-tinta: #12442f;
+  --nota-acento: #b3261f;
+  --velo: rgba(18, 68, 47, 0.82);
+}
+
+/* ---------- Fachada ---------- */
+
+[data-diseno="envoltura"] .suelo {
+  left: 50%;
+  bottom: 0;
+  width: max(100%, calc(var(--u) * 160));
+  height: calc(var(--u) * 34);
+  translate: -50% 0;
+  background: #1d6a4a;
+}
+
+[data-diseno="envoltura"] .casa-regalo {
+  left: 50%;
+  bottom: calc(var(--u) * 28);
+  width: calc(var(--u) * 88);
+  aspect-ratio: 100 / 120;
+  translate: -50% 0;
+}
+
+[data-diseno="envoltura"] .casa-regalo > * {
+  position: absolute;
+}
+
+[data-diseno="envoltura"] .casa-regalo > svg {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+[data-diseno="envoltura"] .muro {
+  fill: #c42f27;
+}
+
+[data-diseno="envoltura"] .ventana {
+  fill: #ffe08a;
+}
+
+[data-diseno="envoltura"] .cruceta {
+  fill: none;
+  stroke: #c42f27;
+  stroke-width: 1.6;
+}
+
+[data-diseno="envoltura"] .amarre {
+  fill: #efb83f;
+}
+
+[data-diseno="envoltura"] .cinta-cola {
+  fill: #d99a22;
+}
+
+[data-diseno="envoltura"] .cinta-lazo {
+  fill: none;
+  stroke: #efb83f;
+  stroke-width: 7;
+  stroke-linejoin: round;
+}
+
+[data-diseno="envoltura"] .amarre > * {
+  transform-origin: 50px 22px;
+  transition: transform 0.5s cubic-bezier(0.6, -0.3, 0.6, 0.6);
+}
+
+[data-diseno="envoltura"] .cinta-h {
+  transform-origin: 50px 62px !important;
+}
+
+[data-diseno="envoltura"] :is([data-paso="abriendo"], [data-paso="entrando"]) :is(.cinta-lazo, .cinta-nudo, .cinta-cola) {
+  transform: scale(0);
+}
+
+[data-diseno="envoltura"] :is([data-paso="abriendo"], [data-paso="entrando"]) .cinta-h {
+  transform: scaleX(0);
+  transition-delay: 0.25s;
+}
+
+[data-diseno="envoltura"] :is([data-paso="abriendo"], [data-paso="entrando"]) .cinta-v {
+  transform: scaleY(0);
+  transition-delay: 0.35s;
+}
+
+[data-diseno="envoltura"] .umbral,
+[data-diseno="envoltura"] .vano {
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+}
+
+[data-diseno="envoltura"] .umbral {
+  width: 33%;
+  height: 44%;
+  background: #efb83f;
+}
+
+[data-diseno="envoltura"] .vano {
+  width: 28%;
+  height: 42%;
+}
+
+/* Puerta partida: primero se abre la hoja de arriba, luego la de abajo. */
+[data-diseno="envoltura"] .hoja-puerta {
+  left: 0;
+  right: 0;
+  background: #1d6a4a;
+  transform-origin: 0 50%;
+}
+
+[data-diseno="envoltura"] .hoja-puerta.arriba {
+  top: 0;
+  height: 50%;
+  border-bottom: 1px solid #0f4630;
+}
+
+[data-diseno="envoltura"] .hoja-puerta.abajo {
+  bottom: 0;
+  height: 50%;
+}
+
+[data-diseno="envoltura"] .arriba i {
+  position: absolute;
+  inset: 16% 18% 16%;
+  background: #ffe08a;
+}
+
+[data-diseno="envoltura"] .arriba i::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(#1d6a4a, #1d6a4a) 50% 50% / calc(var(--u) * 1) 100% no-repeat,
+    linear-gradient(#1d6a4a, #1d6a4a) 50% 50% / 100% calc(var(--u) * 1) no-repeat;
+}
+
+[data-diseno="envoltura"] .abajo i {
+  position: absolute;
+  top: 14%;
+  right: 9%;
+  width: 14%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #f6b73c;
+}
+
+[data-diseno="envoltura"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta {
+  transform: rotateY(-114deg);
+  filter: brightness(0.7);
+  transition-duration: 0.85s;
+  transition-delay: 0.2s;
+}
+
+[data-diseno="envoltura"] :is([data-paso="abriendo"], [data-paso="entrando"]) .hoja-puerta.abajo {
+  transition-delay: 0.42s;
+}
+
+[data-diseno="envoltura"] .arbol {
+  background: #12442f;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+[data-diseno="envoltura"] .arbol.a1 {
+  right: calc(50% + var(--u) * 34);
+  bottom: calc(var(--u) * 34);
+  width: calc(var(--u) * 24);
+  height: calc(var(--u) * 58);
+}
+
+[data-diseno="envoltura"] .arbol.a2 {
+  left: calc(50% + var(--u) * 36);
+  bottom: calc(var(--u) * 34);
+  width: calc(var(--u) * 22);
+  height: calc(var(--u) * 44);
+  background: #1d6a4a;
+}
+
+[data-diseno="envoltura"] .arbol.a3 {
+  right: calc(50% + var(--u) * 56);
+  bottom: calc(var(--u) * 34);
+  width: calc(var(--u) * 30);
+  height: calc(var(--u) * 36);
+  background: #e9822f;
+}
+
+[data-diseno="envoltura"] .arbol.a4 {
+  left: calc(50% + var(--u) * 58);
+  bottom: calc(var(--u) * 34);
+  width: calc(var(--u) * 26);
+  height: calc(var(--u) * 66);
+}
+
+/* ---------- Casillas: papel de regalo ---------- */
+
+[data-diseno="envoltura"] .casilla {
+  --base: #c42f27;
+  --dibujo: none;
+  --lazo: #f9d56e;
+  --etiqueta: #fffaf0;
+  --etiqueta-tinta: #12442f;
+}
+
+/* 1: verde liso */
+[data-diseno="envoltura"] [data-tono="1"] {
+  --base: #1d6a4a;
+  --lazo: #ee7f2d;
+}
+
+/* 2: rayas diagonales */
+[data-diseno="envoltura"] [data-tono="2"] {
+  --base: #ffdf94;
+  --dibujo: repeating-linear-gradient(45deg, #c42f27 0 7px, transparent 7px 21px);
+  --lazo: #1d6a4a;
+}
+
+/* 3: naranja liso */
+[data-diseno="envoltura"] [data-tono="3"] {
+  --base: #ee7f2d;
+  --lazo: #12442f;
+}
+
+/* 4: lunares */
+[data-diseno="envoltura"] [data-tono="4"] {
+  --base: #c42f27;
+  --dibujo: radial-gradient(circle, #ffe3a4 3px, transparent 3.5px) 0 0 / 18px 18px;
+  --lazo: #fff1d4;
+}
+
+/* 5: pinitos */
+[data-diseno="envoltura"] [data-tono="5"] {
+  --base: #1d6a4a;
+  --dibujo: conic-gradient(from 153deg at 50% 15%, #3b946b 54deg, transparent 0) 0 0 / 18px 20px;
+  --lazo: #f9d56e;
+}
+
+/* 6: amarillo liso */
+[data-diseno="envoltura"] [data-tono="6"] {
+  --base: #f6b73c;
+  --lazo: #c42f27;
+}
+
+/* 7: cuadros */
+[data-diseno="envoltura"] [data-tono="7"] {
+  --base: #fff8e6;
+  --dibujo:
+    linear-gradient(90deg, rgba(29, 106, 74, 0.55) 50%, transparent 0) 0 0 / 20px 20px,
+    linear-gradient(rgba(29, 106, 74, 0.55) 50%, transparent 0) 0 0 / 20px 20px;
+  --lazo: #c42f27;
+}
+
+[data-diseno="envoltura"] .tapa {
+  border-radius: var(--radio);
+}
+
+[data-diseno="envoltura"] .hoja {
+  position: absolute;
+  inset: 0;
+}
+
+[data-diseno="envoltura"] .h2 {
+  display: none;
+}
+
+[data-diseno="envoltura"] .cara {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radio);
+  background: var(--dibujo), var(--base);
+  background-color: var(--base);
+}
+
+[data-diseno="envoltura"] .casilla[data-tono="0"] .cara,
+[data-diseno="envoltura"] .casilla:is([data-tono="1"], [data-tono="3"], [data-tono="6"]) .cara {
+  background: var(--base);
+}
+
+/* Cinta que amarra el paquete. */
+[data-diseno="envoltura"] .cara::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto;
+  left: calc(50% - 5.5cqmin);
+  width: 11cqmin;
+  background: var(--lazo);
+}
+
+[data-diseno="envoltura"] [data-forma="alto"] .cara::before {
+  inset: calc(50% - 5.5cqmin) 0 auto;
+  width: auto;
+  height: 11cqmin;
+}
+
+[data-diseno="envoltura"] :is([data-forma="grande"], [data-forma="ancho"]) .cara::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 5.5cqmin) 0 auto;
+  height: 11cqmin;
+  background: var(--lazo);
+}
+
+/* Etiqueta redonda con el número. */
+[data-diseno="envoltura"] .cara .num {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 62cqmin;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--etiqueta);
+  color: var(--etiqueta-tinta);
+  font-size: 34cqmin;
+}
+
+[data-diseno="envoltura"] [data-forma="grande"] .cara .num {
+  width: 50cqmin;
+  font-size: 28cqmin;
+}
+
+/* El rollo de papel: aparece en el borde y sube recogiendo la envoltura. */
+[data-diseno="envoltura"] .rollo {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 100%;
+  height: 16cqmin;
+  margin-top: -8cqmin;
+  border-radius: 99px;
+  opacity: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.45) 35%, rgba(0, 0, 0, 0.35)),
+    var(--base);
+  box-shadow: 0 0.4rem 0.7rem -0.1rem rgba(60, 30, 0, 0.45);
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] .cara::before {
+  animation: recoger 0.35s cubic-bezier(0.6, 0, 0.9, 0.4) both;
+  transform-origin: 50% 0;
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] .cara::after,
+[data-diseno="envoltura"] [data-forma="alto"][data-estado="abriendo"] .cara::before {
+  animation: recoger-x 0.35s 0.08s cubic-bezier(0.6, 0, 0.9, 0.4) both;
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] .cara .num {
+  animation: soltar 0.4s 0.2s cubic-bezier(0.6, -0.4, 0.8, 0.4) both;
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] .h1 {
+  animation: enrollar 0.85s 0.5s cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] .rollo {
+  animation: rodar 1.15s 0.5s both;
+}
+
+[data-diseno="envoltura"] [data-estado="abriendo"] {
+  --demora-motivo: 0.85s;
+}
+
+/* Las anchas se enrollan de costado. */
+[data-diseno="envoltura"] [data-forma="ancho"] .rollo {
+  inset: -3% auto -3% 100%;
+  width: 16cqmin;
+  height: auto;
+  margin: 0 0 0 -8cqmin;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.45) 35%, rgba(0, 0, 0, 0.35)),
+    var(--base);
+}
+
+[data-diseno="envoltura"] [data-forma="ancho"][data-estado="abriendo"] .h1 {
+  animation-name: enrollar-x;
+}
+
+[data-diseno="envoltura"] [data-forma="ancho"][data-estado="abriendo"] .rollo {
+  animation-name: rodar-x;
+}
+
+@keyframes recoger-x {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes soltar {
+  to {
+    transform: scale(0) rotate(40deg);
+  }
+}
+
+@keyframes enrollar {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes rodar {
+  0% {
+    opacity: 1;
+    top: 100%;
+    scale: 1 0.4;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
+  }
+  74% {
+    opacity: 1;
+    top: 0;
+    scale: 1 1.15;
+  }
+  to {
+    opacity: 0;
+    top: -14%;
+    scale: 0.9 1;
+  }
+}
+
+@keyframes enrollar-x {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes rodar-x {
+  0% {
+    opacity: 1;
+    left: 100%;
+    scale: 0.4 1;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
+  }
+  74% {
+    opacity: 1;
+    left: 0;
+    scale: 1.15 1;
+  }
+  to {
+    opacity: 0;
+    left: -8%;
+    scale: 1 0.9;
+  }
+}
+
+/* Abierta: la caja de cartón clarita. */
+[data-diseno="envoltura"] .hueco {
+  box-shadow: inset 0 0 0 2px #f1cd85;
+}
+
+[data-diseno="envoltura"] [data-estado="cerrado"] {
+  --apagado: 1;
+}
+
+[data-diseno="envoltura"] [data-estado="cerrado"] .tapa {
+  opacity: 0.6;
+}
+
+[data-diseno="envoltura"] [data-estado="listo"][data-hoy]:not([data-forma="especial"]) {
+  box-shadow:
+    0 0 0 3px var(--fondo),
+    0 0 0 6px #c42f27;
+}
+
+[data-diseno="envoltura"] [data-estado="listo"][data-hoy]:not([data-forma="especial"]) .cara .num {
+  animation: etiqueta 2.2s ease-in-out infinite;
+}
+
+@keyframes etiqueta {
+  50% {
+    transform: scale(1.1) rotate(-6deg);
+  }
+}
+
+[data-diseno="envoltura"] .nota {
+  border-top: 0.9rem solid #c42f27;
+}
+
+[data-diseno="envoltura"] .nota.dorada {
+  border-top: 0;
+}

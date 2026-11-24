@@ -1,0 +1,80 @@
+---
+// Diseño 1, "Pino": casa verde con puerta roja de dos hojas; cada casilla es
+// una puertita que se abre.
+import "@fontsource/young-serif/400.css";
+import Casa from "../layouts/Casa.astro";
+import "../styles/pino.css";
+
+// Corona de la puerta: hojas alrededor de un aro y bayas naranjas.
+const hojas = Array.from({ length: 22 }, (_, i) => (i * 360) / 22);
+const bayas = [20, 95, 160, 235, 300];
+
+// Guirnalda de luces: cuelga en tres ondas a lo ancho.
+const focos = Array.from({ length: 13 }, (_, i) => {
+  const x = 8 + i * 24.5;
+  const t = ((x / 310) * 3) % 1;
+  return { x, y: 8 + 4 * 16 * t * (1 - t), color: i % 4 };
+});
+---
+
+<Casa
+  diseno="pino"
+  acomodo="normal"
+  variantes={5}
+  colorTema="#123f30"
+  colorIcono="#1d6148"
+  confeti={["#e2ae38", "#fbe9ad", "#b3261e", "#e0702f", "#4f9a6e"]}
+>
+  <Fragment slot="fachada">
+    <div class="pared"></div>
+    <div class="piso"></div>
+    <div class="guirnalda" aria-hidden="true">
+      {
+        [0, 1, 2, 3, 4].map(() => (
+          <svg viewBox="0 0 310 34">
+            <path d="M0 8Q51.7 40 103.3 8Q155 40 206.7 8Q258.3 40 310 8" class="cable" />
+            {focos.map((f) => (
+              <circle cx={f.x} cy={f.y + 3} r="4" class={`foco foco-${f.color}`} />
+            ))}
+          </svg>
+        ))
+      }
+    </div>
+    <div class="maceta izq"><i></i><i></i><i></i><b></b></div>
+    <div class="maceta der"><i></i><i></i><i></i><b></b></div>
+    <div class="farol izq"></div>
+    <div class="farol der"></div>
+    <div class="escalon"></div>
+    <div class="marco-puerta"></div>
+    <div class="vano" id="vano">
+      <button type="button" class="puerta" id="puerta" aria-label="Tocar la puerta y entrar a la casa">
+        {
+          ["izq", "der"].map((lado) => (
+            <span class={`hoja-puerta ${lado}`}>
+              <span class="panel arriba" />
+              <span class="panel abajo" />
+              <svg class="corona" viewBox="-50 -50 100 100" aria-hidden="true">
+                <circle r="33" class="aro" />
+                {hojas.map((a, i) => (
+                  <ellipse
+                    cx="0"
+                    cy="-33"
+                    rx="5"
+                    ry="11"
+                    transform={`rotate(${a}) rotate(${i % 2 ? 42 : -42} 0 -33)`}
+                  />
+                ))}
+                {bayas.map((a) => (
+                  <circle class="baya" cy="-33" r="4.5" transform={`rotate(${a})`} />
+                ))}
+                <path class="mono-corona" d="M0 33C-8 22-20 22-20 33s12 11 20 0c8 11 20 11 20 0S8 22 0 33Z" />
+                <path class="mono-corona" d="M-2 34-10 50l7-3 3-10 3 10 7 3L2 34Z" />
+              </svg>
+              <span class="perilla" />
+            </span>
+          ))
+        }
+      </button>
+    </div>
+  </Fragment>
+</Casa>
